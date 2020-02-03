@@ -1,0 +1,10 @@
+html,body{overflow-x:hidden}
+blockquote{overflow-x:auto}
+:not(pre)>.hljs{display:inline;line-height:1.5em;}
+pre>.buttons button{color:#aaa}
+.content{padding:0 5px}
+:focus{outline:none}
+#menu-bar{position:static}
+#menu-bar-sticky-container{transform:none!important;border-bottom-color:#fff!important}
+.ace_scroller.ace_scroll-left{box-shadow:none}
+.ace-dawn .ace_comment{font-style:normal}

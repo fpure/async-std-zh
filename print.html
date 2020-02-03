@@ -1,0 +1,1767 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 async-std 在 Rust 中进行异步编程</title>
+        
+        <meta name="robots" content="noindex" />
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Async programming in Rust with async-std">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="introduction.zh.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="expanded "><a href="overview/async-std.zh.html"><strong aria-hidden="true">1.1.</strong> 欢迎来到async-std！</a></li><li class="expanded "><a href="overview/std-and-library-futures.zh.html"><strong aria-hidden="true">1.2.</strong> std::future和futures-rs</a></li><li class="expanded "><a href="overview/stability-guarantees.zh.html"><strong aria-hidden="true">1.3.</strong> 稳定性保证</a></li></ol></li><li class="expanded "><a href="concepts.zh.html"><strong aria-hidden="true">2.</strong> 使用 async-std 的异步概念</a></li><li><ol class="section"><li class="expanded "><a href="concepts/futures.zh.html"><strong aria-hidden="true">2.1.</strong> Futures</a></li><li class="expanded "><a href="concepts/tasks.zh.html"><strong aria-hidden="true">2.2.</strong> Tasks</a></li><li class="expanded "><a href="concepts/async-read-write.zh.html"><strong aria-hidden="true">2.3.</strong> TODO：异步读/写</a></li><li class="expanded "><a href="concepts/streams.zh.html"><strong aria-hidden="true">2.4.</strong> TODO：Streams and Channels</a></li></ol></li><li class="expanded "><a href="tutorial/index.zh.html"><strong aria-hidden="true">3.</strong> 教程：实现聊天</a></li><li><ol class="section"><li class="expanded "><a href="tutorial/specification.zh.html"><strong aria-hidden="true">3.1.</strong> 规格和入门</a></li><li class="expanded "><a href="tutorial/accept_loop.zh.html"><strong aria-hidden="true">3.2.</strong> 编写一个 Accept 循环</a></li><li class="expanded "><a href="tutorial/receiving_messages.zh.html"><strong aria-hidden="true">3.3.</strong> 接收讯息</a></li><li class="expanded "><a href="tutorial/sending_messages.zh.html"><strong aria-hidden="true">3.4.</strong> 发送讯息</a></li><li class="expanded "><a href="tutorial/connecting_readers_and_writers.zh.html"><strong aria-hidden="true">3.5.</strong> 连接读者和作家</a></li><li class="expanded "><a href="tutorial/all_together.zh.html"><strong aria-hidden="true">3.6.</strong> 全部一起来</a></li><li class="expanded "><a href="tutorial/clean_shutdown.zh.html"><strong aria-hidden="true">3.7.</strong> 干净地关机</a></li><li class="expanded "><a href="tutorial/handling_disconnection.zh.html"><strong aria-hidden="true">3.8.</strong> 处理断开连接</a></li><li class="expanded "><a href="tutorial/implementing_a_client.zh.html"><strong aria-hidden="true">3.9.</strong> 实现一个 Client</a></li></ol></li><li class="expanded "><a href="patterns.zh.html"><strong aria-hidden="true">4.</strong> TODO：异步模式</a></li><li><ol class="section"><li class="expanded "><a href="patterns/small-patterns.zh.html"><strong aria-hidden="true">4.1.</strong> TODO：收集的小模式</a></li></ol></li><li class="expanded "><a href="security/index.zh.html"><strong aria-hidden="true">5.</strong> 安全实践</a></li><li><ol class="section"><li class="expanded "><a href="security/policy.zh.html"><strong aria-hidden="true">5.1.</strong> 安全披露和政策</a></li></ol></li><li class="expanded "><a href="glossary.zh.html"><strong aria-hidden="true">6.</strong> 术语</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">使用 async-std 在 Rust 中进行异步编程</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p><img src="./images/horizontal_color.svg" alt="async-std logo" /></p>
+<p>本书是<code>async-std</code>的高级文档，其中，通过学习本箱子，能很好地贯通 Rust 异步编程。因此，它着重于<code>async-std</code>API 及其提供的任务模型（task model）。</p>
+<p>请注意，Rust 项目提供了自己的一本有关异步编程的书，名为<a href="https://chinanf-boy.github.io/async-book-zh/">“Asynchronous Programming in Rust”</a>，我们强烈建议您与本书一起阅读，因为它提供了，关于该主题更广泛的不同观点。</p>
+<h1><a class="header" href="#welcome-to-async-std" id="welcome-to-async-std">Welcome to <code>async-std</code></a></h1>
+<p><code>async-std</code>，连同其<a href="https://github.com/async-rs">在支持的库</a>，使您在异步编程中的生活更轻松。它为下游库和应用程序提供了基本的实现。名称反映了该库的方法：它尽可能遵照 Rust 主要标准库的模样，用 async 对等替换所有组件。</p>
+<p><code>async-std</code>提供了所有重要原语的接口：文件系统操作，网络操作和并发性基础（如计时器）。它还暴露了<code>task</code>，类似于在 Rust 标准库中的<code>thread</code>模块。但是它不仅包含 I/O 原语，而且还包含<code>async/await</code>兼容版本的原语，如<code>Mutex</code>。</p>
+<blockquote>
+<p>译：primitives/原语/元语 - 原始的，早期的，固有的</p>
+</blockquote>
+<h1><a class="header" href="#stdfuture-and-futures-rs" id="stdfuture-and-futures-rs"><code>std::future</code> and <code>futures-rs</code></a></h1>
+<p>Rust 的<code>Future</code>，有两个不同的来源：</p>
+<ul>
+<li>首先是<code>std::future::Future</code>，来自 Rust 的<a href="https://doc.rust-lang.org/std/future/trait.Future.html">标准库</a>。</li>
+<li>第二个是<code>futures::future::Future</code>，来自<a href="https://docs.rs/futures/0.3/futures/prelude/trait.Future.html">futures-rs 箱子</a>。</li>
+</ul>
+<p>而定义在<a href="https://docs.rs/futures/0.3/futures/prelude/trait.Future.html">futures-rs</a>箱子中的 Future，是该类型的原始实现。（因为）要启用<code>async/await</code>语法，Future 的主要 trait 被转移到 Rust 的标准库中，成为了<code>std::future::Future</code>。从某种意义上说<code>std::future::Future</code>就可以看作是<code>futures::future::Future</code>。</p>
+<p>了解<code>std::future::Future</code>和<code>futures::future::Future</code>两者之间区别，以及<code>async-std</code>榜上他俩的方法至关重要。在<code>std::future::Future</code>里面，其实并没有您作为一名用户，想要交互的内容 —— 除非通过在上面调用<code>.await</code>。<code>std::future::Future</code>的内部运作，对 implementing <code>Future</code>的人来说，大概率是最感兴趣的。不要混淆 —— 这点非常有用！以前定义在<code>Future</code>的大多数功能性代码，本身已经被移到一个称为<a href="https://docs.rs/futures/0.3/futures/future/trait.FutureExt.html"><code>FuturesExt</code></a> trait。根据这些信息，您或许可以推断<code>futures</code>库的角色是，作为 core Rust 异步特性的扩展。</p>
+<p>传承<code>futures</code>,<code>async-std</code>也会再出口 core <code>std::future::Future</code>类型。您可以自由地操作这项扩展，具体是将<code>futures-preview</code>添加到<code>Cargo.toml</code>，以及导入<code>FuturesExt</code>。</p>
+<h2><a class="header" href="#interfaces-and-stability" id="interfaces-and-stability">Interfaces and Stability</a></h2>
+<p><code>async-std</code>旨在成为一个稳定可靠的库，处于 Rust 标准库的水平。这也意味着，我们接口不依赖<code>futures</code>库。然而，我们很感激许多用户已经开始喜欢这<code>futures-rs</code>带来的便捷。因此，<code>async-std</code>为它的类型实现所有<code>futures</code> trait。</p>
+<p>幸运的是，上面的方法给了你完全的灵活性。如果你非常关心稳定性，你可以照原样使用<code>async-std</code>。如果你更喜欢<code>futures</code>库接口，赶上。两种用法都是一流的。</p>
+<h2><a class="header" href="#async_stdfuture" id="async_stdfuture"><code>async_std::future</code></a></h2>
+<p>我们认为，有一些支持的功能对 Futures 都很重要，不管是什么类型。这些可以在<code>async_std::future</code>模块，且有我们的稳定性保证。</p>
+<h2><a class="header" href="#streams-and-readwriteseekbufread-traits" id="streams-and-readwriteseekbufread-traits">Streams and Read/Write/Seek/BufRead traits</a></h2>
+<p>由于 Rust 编译器的局限性，这些目前仅实现在<code>async_std</code>，但不能由用户自己实现。</p>
+<h1><a class="header" href="#stability-and-semver" id="stability-and-semver">Stability and SemVer</a></h1>
+<p><code>async-std</code>跟随<a href="https://semver.org/">https://semver.org/</a>的脚步。</p>
+<p>简而言之：我们将软件版本控制为<code>MAJOR.MINOR.PATCH</code>。我们补充下：</p>
+<ul>
+<li>MAJOR 版本，API 不兼容</li>
+<li>MINOR 版本，向后兼容地给出功能</li>
+<li>PATCH 版本，向后兼容的错误修复时的</li>
+</ul>
+<p>而文档方面，我们将提供主要版本之间的迁移文档。</p>
+<h2><a class="header" href="#future-expectations" id="future-expectations">Future expectations</a></h2>
+<p><code>async-std</code>使用自己的实现，有一下几个概念：</p>
+<ul>
+<li><code>Read</code></li>
+<li><code>Write</code></li>
+<li><code>Seek</code></li>
+<li><code>BufRead</code></li>
+<li><code>Stream</code></li>
+</ul>
+<p>为了与生态系统集成，实现这些 trait 的所有类型，对应的，也在<code>futures-rs</code>箱子有实现。请注意，我们的 SemVer 守则，不会扩展到这些接口的使用。我们希望这些内容是保守更新，并同步进行。</p>
+<h2><a class="header" href="#minimum-version-policy" id="minimum-version-policy">Minimum version policy</a></h2>
+<p>当前的暂行策略是，可以在 minor 版本更新中，要增加使用此箱子所需的最低 Rust 版本。例如，如果<code>async-std</code> 1.0 需要 Rust 1.37.0，然后对<code>async-std</code> 1.0.z 来说(其中 z 是数字)，就会需要 Rust 1.37.0 或更高版本。然而，对<code>async-std</code> 1.y 来说(表示 y&gt; 0)，那么你可能需要更新的 Rust 版本。</p>
+<p>通常，此箱子比较保守，会遵循最低支持版本的 Rust。不过，<code>async/await</code>毕竟是作为一项新功能，我们会权衡保守与勇进的。</p>
+<h2><a class="header" href="#security-fixes" id="security-fixes">Security fixes</a></h2>
+<p>安全修复程序会给<em>所有</em>的 minor 分支上应用，终落在该库的所有<em>支持的</em> major 版本上。此策略将来可能会更改，在这种情况下，我们至少会发出通知<em>3 个月</em>先。</p>
+<h2><a class="header" href="#credits" id="credits">Credits</a></h2>
+<p>此策略基于<a href="https://github.com/rust-lang/regex#minimum-rust-version-policy">BurntSushi’s regex crate</a>。</p>
+<h1><a class="header" href="#async-concepts-using-async-std" id="async-concepts-using-async-std">Async concepts using async-std</a></h1>
+<p><a href="https://en.wikipedia.org/wiki/Futures_and_promises">Rust Futures</a>以困难著称。我们认为情况并非如此。在我们看来，它们是现今最简单的并发概念之一，并具有直观的解释。</p>
+<p>但是，人们的’困难’总有充分的理由。Future 的三个基本概念似乎始终是造成混乱的根源：延迟计算，异步性和执行策略的独立性（deferred computation, asynchronicity and independence of execution strategy）。</p>
+<p>这些概念并不难，但是很多人并不习惯。这种基本的困惑被细节的许多实现所放大。这些实现的大多数说明，甚至只针对高级用户，对于初学者可能很难。而我们，试图提供易于理解的原语，和概念的平易近人一面。</p>
+<p>Future 是一个抽象代码运行方式的概念。若是这概念能出声，会说：”我什么也不做”。在命令式语言中，这是一个怪异的概念，因为通常，程序中的一件事应——立即——发生在另一件事之后。</p>
+<p>那么 Future 如何运行？看下去，你可以自己上手！</p>
+<p>Future 什么都不做，不会<em>执行</em>代码，哪怕一丢丢。而这部分称为<em>executor（执行者）</em>。</p>
+<blockquote>
+<p>译者：这里我觉得可以看作为，作者写了个笑话，Future 明明什么都不做，却给个执行者的称呼。当然，这是概念的一部分。</p>
+</blockquote>
+<p>一个<em>执行者</em>决定，<em>什么时候</em>和<em>怎么样</em>执行您的 Future。而<code>async-std::task</code>模块为您提供了此类执行值的接口。</p>
+<p>不过，让我们从一些动机开始。</p>
+<h1><a class="header" href="#futures" id="futures">Futures</a></h1>
+<p>关于 Rust 的值得注意的一点是<a href="https://blog.rust-lang.org/2015/04/10/Fearless-Concurrency.html"><em>无畏并发</em></a>。这就是应该授权您在不放弃安全性的情况下，执行并发任务的思考。同样，Rust 作为一种低级语言，它的无畏并发中，<em>没有选择具体的实现策略</em>。这意味着，我们<em>必须</em>对策略进行抽象，以允许<em>后来</em>选择(给用户发挥的空间)，如果我们想以某种方式，在不同策略的用户之间共享代码，这又怎么搞。</p>
+<p>Future 从*计算(computation)*抽象出来。描述了“什么(what)”，与“哪里(where)”和“何时(when)”无关。为此，他们的目标是将代码分解为可组合的小行动，然后由我们系统的一部分执行。让我们来趟旅程，计算下东西，找找可以抽象的地方，理解它的含义。</p>
+<h2><a class="header" href="#send-and-sync" id="send-and-sync">Send and Sync</a></h2>
+<p>幸运的是，并发 Rust 已经有两个众所周知的有效概念，它们抽象了程序并发部分之间的共享：<code>Send</code>和<code>Sync</code>。值得注意的是，<code>Send</code>和<code>Sync</code> trait 抽象的<em>策略</em>，包括并发工作，组成整齐，并且不实际实现。</p>
+<p>快速摘要：</p>
+<ul>
+<li>
+<p><code>Send</code>抽象了，在一个计算中，<em>将数据传递</em>，到另一个并发计算（让我们称其为接收方-receiver），而在发送方则失去对它的访问。在许多编程语言中，通常都采用这种策略，但是缺少语言方面的支持，因此希望您自己遵循“丢失访问”行为。这是漏洞的常规来源：发件人保留发送内容的控制权，甚至在发送后也去使用它们。Rust 通过将这种行为定为’已知’，来减轻此问题。类型可以为是/非<code>Send</code>（通过实现适当的标记 trait），能/不允许将它们发送出去，而所有权和借用规则会对后续访问进行控制(阻止与否)。</p>
+</li>
+<li>
+<p><code>Sync</code>关于<em>共享数据</em>，处在程序的两个并发部分之间。这是另一种常见的模式：由于写入内存位置，或在另一方正在写入时，就进行读取，在本质上是不安全的，因此需要通过同步(sync)来缓和这种访问。<sup class="footnote-reference"><a href="#1">1</a></sup>这里有许多常见方式，针对双方共识，即不要同时使用内存中的同一部分，例如互斥锁和自旋锁（mutexes and spinlocks）。同样，Rust 为您提供了省心的（安全！）选项。Rust 使您能够表达某些<em>需要</em>同步的东西，但不用具体说明<em>怎么样</em>去做的。</p>
+</li>
+</ul>
+<p>注意我们避免出现类似 <em>“线程(thread)”</em>，而是选择了“计算(computation)”。<code>Send</code>和<code>Sync</code>的威力是，减轻了您对“<em>什么</em>是共享”的学习负担。在实现时，您只需要知道哪种共享方法，是适用于当前类型的。这保持了本地化的合理，不受该类型用户，以后会使用的任何实现的影响。</p>
+<p><code>Send</code>和<code>Sync</code>可以以有趣的方式进行合成，但这超出了本文的范围。您可以在<a href="https://doc.rust-lang.org/stable/book/ch16-04-extensible-concurrency-sync-and-send.html">Rust Book</a>找到示例。</p>
+<p>总结：Rust 使我们能够安全地抽象并发程序的重要属性，及其数据共享。它以非常轻巧的方式进行。语言本身只知道两个标记<code>Send</code>和<code>Sync</code>，并尽可能地通过派生它们本身来帮助我们。剩下的就是图书馆的问题。</p>
+<h2><a class="header" href="#an-easy-view-of-computation" id="an-easy-view-of-computation">An easy view of computation</a></h2>
+<p>虽然 computation 作为一个主题，可以写出一整本<a href="https://computationbook.com/">book</a>出来，但一个非常简化的视图对我们来说，就足够了：一系列可组合的操作，这些操作可以基于决策进行分支，相继执行，并产生（yield）结果或产生（yield）错误</p>
+<h2><a class="header" href="#deferring-computation" id="deferring-computation">Deferring computation</a></h2>
+<p>正如刚才提到的，<code>Send</code>和<code>Sync</code>是关于数据的。但是程序不仅涉及数据，还涉及对数据<em>进行计算</em>。这就是<a href="https://doc.rust-lang.org/std/future/trait.Future.html"><code>Futures</code></a>所要做的。在下一章中，我们将仔细研究它的工作方式。让我们用英语，看看 Future 允许我们表达什么。Future 的计划，是（将正常的计算流程）从：</p>
+<ul>
+<li>做 X</li>
+<li>如果 X 成功，则执行 Y</li>
+</ul>
+<p>转向(这个流程)：</p>
+<ul>
+<li>开始做 X</li>
+<li>一旦 X 成功，就开始做 Y</li>
+</ul>
+<pre><code>- Do X
+- If X succeeded, do Y
+
+towards:
+
+- Start doing X
+- Once X succeeds, start doing Y
+</code></pre>
+<p>还记得前言中，有关“延迟计算”的话题吗？这就是所有的要点。不再<em>立即</em>告诉计算机执行什么，以及下一个决定，我们改成了，告诉它要开始做什么，以及如何对潜在事件做出反应 ... well 也就是 ... <code>Future</code>。</p>
+<h2><a class="header" href="#orienting-towards-the-beginning" id="orienting-towards-the-beginning">Orienting towards the beginning</a></h2>
+<p>让我们看一个简单的函数，特别是返回值：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use std::{fs::File, io, io::prelude::*};
+</span><span class="boring">
+</span>fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(path)?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents)?;
+    Ok(contents)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>您可以随时调用它，因此可以完全控制何时调用它。但这也是问题所在：调用它的那一刻，控制权就转移到被调用的函数，直到它最终返回一个值。请注意，此返回值来自过去(得出值的那一刻)。过去有一个缺点：已经做出了所有决定。它有一个优点：结果是可见。我们可以解开程序过去的计算结果，然后决定如何处理它。</p>
+<p>但是，我们想对<em>computation</em>进行抽象，并让其他人选择运行方式。从根本上说，这与一直查看先前的计算结果不兼容。所以，让我们找到一个类型来<em>描述</em>，一个不执行的 computation。让我们再次看一下函数：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use std::{fs::File, io, io::prelude::*};
+</span><span class="boring">
+</span>fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(path)?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents)?;
+    Ok(contents)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>说到时机，我们只能在调用函数<em>之前</em>或函数返回<em>之后</em>采取行动。而这是不可取的，因为它拿走了，<em>处于</em>运行中，帮我们做某事的能力。当与并行代码配合时，会拿走我们在首次运行时，启动并行任务的能力（因为我们放弃了控制权）。</p>
+<p>这时，是祭出<a href="https://en.wikipedia.org/wiki/Thread_">threads</a>的时候了。但是 threads 是一个非常特定的并发原语，且我们说过我们正在寻找一个抽象。</p>
+<p>我们正在寻找的东西，要能在 future 中，代表正在进行的工作，和朝向一个 result。每当我们在 Rust 语言中，说“something”时，基本可表示为一种 trait。那就让我们从一个不完整的<code>Future</code> trait 定义开始吧：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use std::{pin::Pin, task::{Context, Poll}};
+</span><span class="boring">
+</span>trait Future {
+    type Output;
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>仔细观察，我们看到以下内容：</p>
+<ul>
+<li>它是泛型的<code>Output</code>。</li>
+<li>它提供了一个称为<code>poll</code>的函数，这使我们可以检查/推进当前 computation 的状态。</li>
+<li>（目前忽视<code>Pin</code>和<code>Context</code>，深入理解该 trait 之前，暂时不需要这些。）</li>
+</ul>
+<p>每次调用<code>poll()</code>可能导致以下两种情况之一：</p>
+<ol>
+<li>computation 完成，<code>poll</code>将返回<a href="https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Ready"><code>Poll::Ready</code></a></li>
+<li>computation 尚未完成执行，它将返回<a href="https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Pending"><code>Poll::Pending</code></a></li>
+</ol>
+<p>这使我们可以从外部检查，<code>Future</code>是否仍有未完成的工作，或者最终是完成了，可以给我们带来值。最简单（但效率不高）的方法是，在一个循环中，不断轮询(poll) Future。这有优化的可能性，好的 runtime 会帮你搞定。请注意，情况 1 发生后，再次<code>poll</code>可能会导致行为混乱。参考<a href="https://doc.rust-lang.org/std/future/trait.Future.html">futures-docs</a>中的有关详细信息。</p>
+<h2><a class="header" href="#async" id="async">Async</a></h2>
+<p>而<code>Future</code> trait 在 Rust 中已经存在了一段时间，构建和描述它们都很不方便。为此，Rust 现在具有特殊的语法：<code>async</code>。上面的示例，使用<code>async-std</code>，如下所示：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{fs::File, io, io::prelude::*};
+</span><span class="boring">
+</span>async fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(path).await?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents).await?;
+    Ok(contents)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>差别很小，对吧？我们要做的只是将函数标记上<code>async</code>，并插入 2 个特殊命令：<code>.await</code>。</p>
+<p>这个<code>async</code>函数设置了一个延迟计算。调用此函数时，将产生一个<code>Future&lt;Output = io::Result&lt;String&gt;&gt;</code>，而不是立即返回<code>io::Result&lt;String&gt;</code>。（或者，更准确地说，为您生成一个类型，而这个类型实现了<code>Future&lt;Output = io::Result&lt;String&gt;&gt;</code>）</p>
+<h2><a class="header" href="#what-does-await-do" id="what-does-await-do">What does <code>.await</code> do?</a></h2>
+<p><code>.await</code>后缀，它的作用与其名字完全一样：在您使用它的那一刻，代码将一直等到所请求的操作（例如，打开文件或读取其中的所有数据）完成。<code>.await?</code>并不特殊，只是应用<code>?</code>操作符，整出了<code>.await</code>这个结果。那么，我们从初始代码示例中，又获得了什么？我们正在获取 Future，然后立即等待它们？</p>
+<p>把<code>.await</code>行为称作一个 marker。在这里，代码会等待<code>Future</code>产生其价值。那 Future 又是如何驶向完成的呢？这你不用管了，marker 会允许组件（通常为“runtime”）负责<em>executing</em>这段代码，且当这个 computation 部分完成时，必须执行的所有其他操作。当后台执行操作的完成后，会回到这 marker 的代码位置。这就是为什么，这种编程风格也被称为<em>事件编程(evented programming)</em>。我们在等<em>事情的发生</em>（例如要打开的文件），然后做出反应（如开始读取）。</p>
+<p>当同时执行两个或多个这些函数时，我们的运行时系统便可以通过处理目前正在进行的<em>所有其他事件</em>，来填充等待时间。</p>
+<h2><a class="header" href="#conclusion" id="conclusion">Conclusion</a></h2>
+<p>来到 value（值） 的方面，我们寻找能够表达<em>一直工作，就能获得稍后可用的值</em>。从那里，我们会讨论了轮询(poll)的概念。</p>
+<p><code>Future</code>作为一种任意数据类型，且并不代表一个值，但具有<em>在将来的某个时刻产生值</em>的能力。根据用例，这种实现的方式千差万别，但接口简单。</p>
+<p>接下来，我们将向您介绍<code>tasks</code>，实际使用<em>run</em> Future。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Two parties reading while it is guaranteed that no one is writing is always safe.</p>
+</div>
+<h1><a class="header" href="#tasks" id="tasks">Tasks</a></h1>
+<p>既然我们知道 Future 是什么，就想要撸它！</p>
+<p>在<code>async-std</code>，<a href="https://docs.rs/async-std/latest/async_std/task/index.html"><code>tasks</code></a>模块负责这项行为。最简单的方法是使用<code>block_on</code>函数：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018"><span class="boring">extern crate async_std;
+</span>use async_std::{fs::File, io, prelude::*, task};
+
+async fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(path).await?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents).await?;
+    Ok(contents)
+}
+
+fn main() {
+    let reader_task = task::spawn(async {
+        let result = read_file(&quot;data.csv&quot;).await;
+        match result {
+            Ok(s) =&gt; println!(&quot;{}&quot;, s),
+            Err(e) =&gt; println!(&quot;Error reading file: {:?}&quot;, e)
+        }
+    });
+    println!(&quot;Started task!&quot;);
+    task::block_on(reader_task);
+    println!(&quot;Stopped task!&quot;);
+}
+</code></pre></pre>
+<p>这就要求 runtime 先放进<code>async_std</code>烤一烤，再去执行这份会读取文件的代码。不过停一停，让我们一个个来，从内到外。</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{fs::File, io, prelude::*, task};
+</span><span class="boring">
+</span><span class="boring">async fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+</span><span class="boring">    let mut file = File::open(path).await?;
+</span><span class="boring">    let mut contents = String::new();
+</span><span class="boring">    file.read_to_string(&amp;mut contents).await?;
+</span><span class="boring">    Ok(contents)
+</span><span class="boring">}
+</span><span class="boring">
+</span>async {
+    let result = read_file(&quot;data.csv&quot;).await;
+    match result {
+        Ok(s) =&gt; println!(&quot;{}&quot;, s),
+        Err(e) =&gt; println!(&quot;Error reading file: {:?}&quot;, e)
+    }
+};
+<span class="boring">}
+</span></code></pre></pre>
+<p>这是一个<code>async</code> <em>代码块(block)</em>。 async block 是调用<code>async</code>函数的必要条件，所以同样，还会指示编译器，去包括所有相关指令。在 Rust 中，所有 block 都返回一个值，并且<code>async</code> block 就是会返回<code>Future</code>值。</p>
+<p>但让我们来看看有趣的部分：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>task::spawn(async { });
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>spawn</code>拿了一个<code>Future</code>，并在<code>Task</code>上开始 running。它返回一个<code>JoinHandle</code>。 这时的 Future 在 Rust 社区中，有时被称为<em>冻(cold)</em> Futures。你需要一些东西来管理/激活他们。为了运行一个 Future，可能需要一些额外的记录信息，例如，它是 running 还是完成的状态，和它放在内存中的位置以及当前的状态。这个记录部分被抽象成<code>Task</code>。</p>
+<p>一个<code>Task</code>类似于<code>Thread</code>，但有一些小的区别：它将由程序，而不是操作系统内核调度，如果遇到需要等待(wait)的点，程序本身承担起再次唤醒它的负责 —— 这个我们稍后再谈。一个<code>async_std</code> task 也可以有一个 name 和一个 ID，就像线程一样。</p>
+<p>现在，已给出足够的知识了：你知道了，一旦<code>spawn</code>(生)出一个 task，它将继续在后台运行。这个<code>JoinHandle</code>它本身就是一个 Future，一旦<code>Task</code>已经接近完成了，自然跟随着完成。这与<code>threads</code>以及<code>join</code>函数很像，我们现在可以通过在’控制杆’上调用<code>block_on</code>，<em>阻塞</em>程序（或调用线程，具体来说的话）并等待它完成。</p>
+<h2><a class="header" href="#tasks-in-async_std" id="tasks-in-async_std">Tasks in <code>async_std</code></a></h2>
+<p><code>async_std</code>中的 Tasks 是核心抽象之一。很像 Rust 的<code>thread</code>，他们在原始概念的基础上，提供了一些实用的函数。<code>Tasks</code>与 runtime 之间存有关系，但它们本身是独立的。<code>async_std</code>任务具有许多理想的特性：</p>
+<ul>
+<li>它们被分配到一个单独的分配(single allocation)中</li>
+<li>所有 tasks 都有<em>后门通道</em>，它允许它们通过<code>JoinHandle</code> 传播 results 和 errors 到那 spawning task。</li>
+<li>它们为调试提供了有用的元数据</li>
+<li>它们支持 task 本地存储</li>
+</ul>
+<p><code>async_std</code>的 task API 为您处理，一个后台的 runtime 的设置和拆卸，而不用依赖于一个显式启动的 runtime。</p>
+<h2><a class="header" href="#blocking" id="blocking">Blocking</a></h2>
+<p>假设，<code>Task</code>是<em>同时</em>运行的，(可能)具有共享执行的潜在线程。这意味着，能够阻塞<em>操作系统线程</em>的操作，例如<code>std::thread::sleep</code>或是 Rust <code>std</code> 库的 io 函数，会让<em>共享此线程的所有 tasks，停止执行</em>。其他库（如数据库驱动程序）也有类似的行为。请注意<em>阻塞当前线程</em>它本身并不是不良行为，只是与<code>async-std</code>的并发执行模型不能混用。本质上来说，千万不要这样做：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018"><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>fn main() {
+    task::block_on(async {
+        // this is std::fs, which blocks
+        std::fs::read_to_string(&quot;test_file&quot;);
+    })
+}
+</code></pre></pre>
+<p>如果要混合不同操作，请考虑将这些阻塞操作，放在单独的<code>thread</code>上。</p>
+<h2><a class="header" href="#errors-and-panics" id="errors-and-panics">Errors and panics</a></h2>
+<p>Tasks 通过正常模式报告错误：如果它们是错误的，那么它们的<code>Output</code>应该是某<code>Result&lt;T,E&gt;</code>类型。</p>
+<p>万一<code>panic</code>，行为的不同之处取决于，是否有一个合理的部分处理<code>panic</code>。 如果没有，程序<em>中止</em>.</p>
+<p>实际上，这意味着，<code>block_on</code>会将 panics 传播到阻塞组件：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018 should_panic"><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>fn main() {
+    task::block_on(async {
+        panic!(&quot;test&quot;);
+    });
+}
+</code></pre></pre>
+<pre><code class="language-text">thread 'async-task-driver' panicked at 'test', examples/panic.rs:8:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+</code></pre>
+<p>在 panicing 阶段，一个 spawned task 将中止：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018 should_panic">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span><span class="boring">use std::time::Duration;
+</span>task::spawn(async {
+    panic!(&quot;test&quot;);
+});
+
+task::block_on(async {
+    task::sleep(Duration::from_millis(10000)).await;
+})
+<span class="boring">}
+</span></code></pre></pre>
+<pre><code class="language-text">thread 'async-task-driver' panicked at 'test', examples/panic.rs:8:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+Aborted (core dumped)
+</code></pre>
+<p>一开始这可能看起来很奇怪，但另一个选择是默默忽略 spawned task 中的 panics。当前的行为是可以改变的，具体通过捕获 spawned task 中的 panics，并用自定义行为对其作出反应。这为用户提供了，处理 panics 策略的选择。</p>
+<h2><a class="header" href="#conclusion-1" id="conclusion-1">Conclusion</a></h2>
+<p><code>async_std</code>附带一个有用的<code>Task</code>类型，与<code>std::thread</code> API 类似。 它以结构化和明确性的方式，涵盖了错误和 panics 行为。</p>
+<p>Tasks 作为独立的并发单元，有时，它们之间是需要通信的。这个 moment，<code>Stream</code>出现了。</p>
+<h1><a class="header" href="#todo-async-readwrite" id="todo-async-readwrite">TODO: Async read/write</a></h1>
+<h1><a class="header" href="#todo-streams" id="todo-streams">TODO: Streams</a></h1>
+<h1><a class="header" href="#tutorial-writing-a-chat" id="tutorial-writing-a-chat">Tutorial: Writing a chat</a></h1>
+<p>没有什么比创建聊天服务器更简单了，对吧？不完全是，聊天服务器确实能向您，展示异步编程的所有乐趣：</p>
+<p>服务器将如何处理客户端的并发连接？</p>
+<p>如何处理它们断开连接？</p>
+<p>如何分发消息？</p>
+<p>本教程说明了如何在<code>async-std</code>中编写聊天服务器。</p>
+<p>您也可以在<a href="https://github.com/async-rs/async-std/blob/master/examples/a-chat">our repository</a>，找到该教程。</p>
+<h1><a class="header" href="#specification-and-getting-started" id="specification-and-getting-started">Specification and Getting Started</a></h1>
+<h2><a class="header" href="#specification" id="specification">Specification</a></h2>
+<p>聊天使用基于 TCP 的简单文本协议。该协议包含 utf-8 消息，由<code>\n</code>分隔。</p>
+<p>客户端连接到服务器，发送第一行登录(login)名。之后，客户端可以使用以下语法，将消息发送给其他客户端：</p>
+<pre><code class="language-text">login1, login2, ... loginN: message
+</code></pre>
+<p>然后，每个指定的客户端都会收到一个<code>from login: message</code>信息。</p>
+<p>可能的会话，如下所示</p>
+<pre><code class="language-text">在 Alice's 电脑:        |   在 Bob's 电脑:
+
+&gt; alice                |   &gt; bob
+&gt; bob: hello               &lt; from alice: hello
+                       |   &gt; alice, bob: hi!
+                           &lt; from bob: hi!
+&lt; from bob: hi!        |
+</code></pre>
+<p>聊天服务器的主要挑战是跟踪大量并发连接。聊天客户端的主要挑战是，管理并发地传出消息，传入消息和用户键入。</p>
+<h2><a class="header" href="#getting-started" id="getting-started">Getting Started</a></h2>
+<p>让我们创建一个新的 Cargo 项目：</p>
+<pre><code class="language-bash">$ cargo new a-chat
+$ cd a-chat
+</code></pre>
+<p>将以下行添加到<code>Cargo.toml</code>：</p>
+<pre><code class="language-toml">[dependencies]
+futures = &quot;0.3.0&quot;
+async-std = &quot;1&quot;
+</code></pre>
+<h2><a class="header" href="#writing-an-accept-loop" id="writing-an-accept-loop">Writing an Accept Loop</a></h2>
+<p>让我们实现服务器的支架：一个循环，它将 TCP socket 绑定到地址，并开始接受连接。</p>
+<p>首先，让我们添加所需的导入样板：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span>use async_std::{
+    prelude::*, // 1
+    task, // 2
+    net::{TcpListener, ToSocketAddrs}, // 3
+};
+
+type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;; // 4
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li><code>prelude</code>重新导出与 futures 和 streams 一起使用，所需的某些 trait。</li>
+<li><code>task</code>模块大致对应<code>std::thread</code>模块，但 task 轻得多。一个线程(thread)可以运行许多 tasks。</li>
+<li>对于 socket 类型，我们使用<code>TcpListener</code>，来自<code>async_std</code>，它就像<code>std::net::TcpListener</code>，但非-阻塞，并且使用<code>async</code>API。</li>
+<li>在此示例中，我们会跳过实现全面的错误处理。为了传播错误，我们将使用装箱的（boxed） error trait 对象。你知道 stdlib 中，有个<code>From&lt;&amp;'_ str&gt; for Box&lt;dyn Error&gt;</code>实现吗，它允许您将字符串<code>?</code>操作符？</li>
+</ol>
+<p>现在我们可以编写服务器的 接收 循环：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    net::{TcpListener, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">
+</span>async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; { // 1
+
+    let listener = TcpListener::bind(addr).await?; // 2
+    let mut incoming = listener.incoming();
+    while let Some(stream) = incoming.next().await { // 3
+        // TODO
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>我们将<code>accept_loop</code>函数标记上了<code>async</code>，这使我们可以在内部使用<code>.await</code>语法。</li>
+<li><code>TcpListener::bind</code> call 返回了一个 Future，此处，我们会<code>.await</code>(等待)，提取出<code>Result</code>，然后<code>?</code>得到一个<code>TcpListener</code>。
+注意<code>.await</code>和<code>?</code>的良好合作。这与<code>std::net::TcpListener</code>的工作如此相同，但多个<code>.await</code>而已。
+对<code>std</code> API 施行镜像魔法，是<code>async_std</code>的一个明确的设计目标。</li>
+<li>在这里，我们想迭代传入的 socket，就像在常规<code>std</code>中的那样：</li>
+</ol>
+<pre><pre class="playpen"><code class="language-rust edition2018 should_panic">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>let listener: std::net::TcpListener = unimplemented!();
+for stream in listener.incoming() {
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>不幸的是，目前这还不适用于<code>async</code>，因为在语言中，还不支持<code>async</code> for 循环。因此，我们必须手动实现循环，通过使用<code>while let Some(item) = iter.next().await</code>模式。</p>
+<p>最后，让我们添加 main：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    net::{TcpListener, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">
+</span><span class="boring">async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; { // 1
+</span><span class="boring">    let listener = TcpListener::bind(addr).await?; // 2
+</span><span class="boring">    let mut incoming = listener.incoming();
+</span><span class="boring">    while let Some(stream) = incoming.next().await { // 3
+</span><span class="boring">        // TODO
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span>// main
+fn run() -&gt; Result&lt;()&gt; {
+    let fut = accept_loop(&quot;127.0.0.1:8080&quot;);
+    task::block_on(fut)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>意识到这一点的关键是，Rust 与其他语言不同，调用异步函数确实是<strong>不</strong>运行任何代码的。异步函数仅构造 Future，它们是惰性状态机。要在一个异步函数中，开始逐步遍历 Future 状态机，您应该使用<code>.await</code>。在非异步函数中，执行 Future 的一种方法是将其交给 executor。在这种情况下，我们会使用<code>task::block_on</code>，在当前线程上对 Future 执行并阻塞，直到它完成。</p>
+<h2><a class="header" href="#receiving-messages" id="receiving-messages">Receiving messages</a></h2>
+<p>让我们实现协议的接收部分。我们要：</p>
+<ol>
+<li>将传入的<code>TcpStream</code>用<code>\n</code>拆开，并将字节解码为 utf-8</li>
+<li>将第一行解释为登录名</li>
+<li>将其余的行解析为<code>login: message</code></li>
+</ol>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    io::BufReader,
+</span><span class="boring">    net::{TcpListener, TcpStream, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">
+</span>async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; {
+    let listener = TcpListener::bind(addr).await?;
+    let mut incoming = listener.incoming();
+    while let Some(stream) = incoming.next().await {
+        let stream = stream?;
+        println!(&quot;Accepting from: {}&quot;, stream.peer_addr()?);
+        let _handle = task::spawn(connection_loop(stream)); // 1
+    }
+    Ok(())
+}
+
+async fn connection_loop(stream: TcpStream) -&gt; Result&lt;()&gt; {
+    let reader = BufReader::new(&amp;stream); // 2
+    let mut lines = reader.lines();
+
+    let name = match lines.next().await { // 3
+        None =&gt; Err(&quot;peer disconnected immediately&quot;)?,
+        Some(line) =&gt; line?,
+    };
+    println!(&quot;name = {}&quot;, name);
+
+    while let Some(line) = lines.next().await { // 4
+        let line = line?;
+        let (dest, msg) = match line.find(':') { // 5
+            None =&gt; continue,
+            Some(idx) =&gt; (&amp;line[..idx], line[idx + 1 ..].trim()),
+        };
+        let dest: Vec&lt;String&gt; = dest.split(',').map(|name| name.trim().to_string()).collect();
+        let msg: String = msg.trim().to_string();
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>
+<p>我们用<code>task::spawn</code>函数 孵 一个独立的任务，让它与每个客户端一起工作。也就是说，在接受客户之后<code>accept_loop</code>能立即开始等待下一个。这是事件驱动的体系结构的核心优势：我们同时为许多客户端提供服务，而无需花费很多硬件线程。</p>
+</li>
+<li>
+<p>幸运的是，“将字节流分成几行”的功能已经实现。<code>.lines()</code>调用会传回<code>String</code>的数据流(stream)。</p>
+</li>
+<li>
+<p>我们得到第一行 -- login</p>
+</li>
+<li>
+<p>而且，我们再次手动实现了一个异步 for 循环。</p>
+</li>
+<li>
+<p>最后，我们将每一行解析为目标登录名和消息本身的列表。</p>
+</li>
+</ol>
+<h2><a class="header" href="#managing-errors" id="managing-errors">Managing Errors</a></h2>
+<p>上述解决方案中的一个严重问题是，尽管我们在<code>connection_loop</code>正确传播了 errors，之后我们却将错误扔到了地上！原因是，<code>task::spawn</code>是不会立即返回错误（它做不到，它需要先让 future 完成运行）。而我们可以通过，等待 task 能可以加入了，来“fix”它，如下所示：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#![feature(async_closure)]
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    io::BufReader,
+</span><span class="boring">    net::{TcpListener, TcpStream, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">
+</span><span class="boring">async fn connection_loop(stream: TcpStream) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let reader = BufReader::new(&amp;stream); // 2
+</span><span class="boring">    let mut lines = reader.lines();
+</span><span class="boring">
+</span><span class="boring">    let name = match lines.next().await { // 3
+</span><span class="boring">        None =&gt; Err(&quot;peer disconnected immediately&quot;)?,
+</span><span class="boring">        Some(line) =&gt; line?,
+</span><span class="boring">    };
+</span><span class="boring">    println!(&quot;name = {}&quot;, name);
+</span><span class="boring">
+</span><span class="boring">    while let Some(line) = lines.next().await { // 4
+</span><span class="boring">        let line = line?;
+</span><span class="boring">        let (dest, msg) = match line.find(':') { // 5
+</span><span class="boring">            None =&gt; continue,
+</span><span class="boring">            Some(idx) =&gt; (&amp;line[..idx], line[idx + 1 ..].trim()),
+</span><span class="boring">        };
+</span><span class="boring">        let dest: Vec&lt;String&gt; = dest.split(',').map(|name| name.trim().to_string()).collect();
+</span><span class="boring">        let msg: String = msg.trim().to_string();
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">async move |stream| {
+</span>let handle = task::spawn(connection_loop(stream));
+handle.await
+<span class="boring">};
+</span><span class="boring">}
+</span></code></pre></pre>
+<p><code>.await</code>等到客户端完成，然后<code>?</code>传播结果。</p>
+<p>但是，此解决方案有两个问题！<em>第一</em>，因为我们立即等待客户端，所以我们一次只能处理一个客户端，这完全违反了异步的目的！<em>第二</em>，如果客户端遇到 IO 错误，则整个服务器都会立即退出。也就是说，仅一个端点的不稳定互联网连接，就可以让整个聊天室瘫痪了！</p>
+<p>在这种情况下，处理客户端错误的正确方法是记录它们，并继续为其他客户端提供服务。为此，我们使用一个辅助函数：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    io,
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span>fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+where
+    F: Future&lt;Output = io::Result&lt;()&gt;&gt; + Send + 'static,
+{
+    task::spawn(async move {
+        if let Err(e) = fut.await {
+            eprintln!(&quot;{}&quot;, e)
+        }
+    })
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#sending-messages" id="sending-messages">Sending Messages</a></h2>
+<p>现在该实现另一半了 —— 发送消息。实现发送的最明显方法是，给每个<code>connection_loop</code>访问，平分彼此客户端<code>TcpStream</code>的 write。这样，一个客户可以直接<code>.write_all</code>，给到收件人消息。但是，这会是错误的：如果 Alice 发送<code>bob: foo</code>，然后 Charley 发送<code>bob: bar</code>，Bob 实际上可能会收到<code>fobaor</code>。在 socket 上，发送消息可能需要几个 syscalls，因此两个并发<code>.write_all</code>可能会互相干扰！</p>
+<p>根据经验，每个 task 应该只写入一个<code>TcpStream</code>。因此，让我们创建一个<code>connection_writer_loop</code> task,它能在一个通道(channel)上接收消息，并将其写入 socket。该 task 将是消息序列化的重点。如果 Alice 和 Charley 同时向 Bob 发送了两条消息，则 Bob 会以到达消息的顺序，来查看消息。</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    net::TcpStream,
+</span><span class="boring">    prelude::*,
+</span><span class="boring">};
+</span>use futures::channel::mpsc; // 1
+use futures::sink::SinkExt;
+use std::sync::Arc;
+
+<span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span>type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;; // 2
+type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+
+async fn connection_writer_loop(
+    mut messages: Receiver&lt;String&gt;,
+    stream: Arc&lt;TcpStream&gt;, // 3
+) -&gt; Result&lt;()&gt; {
+    let mut stream = &amp;*stream;
+    while let Some(msg) = messages.next().await {
+        stream.write_all(msg.as_bytes()).await?;
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>我们将使用<code>futures</code>箱子的 channels。</li>
+<li>简单起见，我们将使用<code>unbounded</code> channels，并且在本教程中不会讨论 backpressure。</li>
+<li>如<code>connection_loop</code>一样，<code>connection_writer_loop</code>分享相同的<code>TcpStream</code>，我们需要将其放入<code>Arc</code>。注意，因为<code>client</code>只能读取 stream，和<code>connection_writer_loop</code>只写入 stream，我们在这里没有竞态问题。</li>
+</ol>
+<h2><a class="header" href="#connecting-readers-and-writers" id="connecting-readers-and-writers">Connecting Readers and Writers</a></h2>
+<p>那么我们如何确保，<code>connection_loop</code>读到的信息流入对应的<code>connection_writer_loop</code>？我们应该以某种方式保有一个<code>peers: HashMap&lt;String, Sender&lt;String&gt;&gt;</code> map，一个允许客户查找目标频道的’地图’。但是，此 map 会有些共享的可变状态，因此我们必须裹入一个<code>RwLock</code>，并回答个棘手的问题，即如果客户端在收到消息的同时，加入该怎么办。</p>
+<p>使状态的推理更简单的一个技巧，来自参与者模型(actor model)。我们可以创建一个专用的代理人（dedicated broker）任务，该任务拥有<code>peers</code> map ，并通过 channels 与其他任务进行通信。通过将<code>peers</code>隐藏在，如一个 “actor” 任务内，我们无需使用 mutxes，并且还明确了序列化点。两件事件，“Bob 将消息发送给 Alice”和“Alice 加入”的顺序，由代理人的事件队列中，相应事件的顺序确定。</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    net::TcpStream,
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">use futures::channel::mpsc;
+</span><span class="boring">use futures::sink::SinkExt;
+</span><span class="boring">use std::sync::Arc;
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+</span><span class="boring">type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+</span><span class="boring">
+</span><span class="boring">async fn connection_writer_loop(
+</span><span class="boring">    mut messages: Receiver&lt;String&gt;,
+</span><span class="boring">    stream: Arc&lt;TcpStream&gt;,
+</span><span class="boring">) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let mut stream = &amp;*stream;
+</span><span class="boring">    while let Some(msg) = messages.next().await {
+</span><span class="boring">        stream.write_all(msg.as_bytes()).await?;
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+</span><span class="boring">where
+</span><span class="boring">    F: Future&lt;Output = Result&lt;()&gt;&gt; + Send + 'static,
+</span><span class="boring">{
+</span><span class="boring">    task::spawn(async move {
+</span><span class="boring">        if let Err(e) = fut.await {
+</span><span class="boring">            eprintln!(&quot;{}&quot;, e)
+</span><span class="boring">        }
+</span><span class="boring">    })
+</span><span class="boring">}
+</span><span class="boring">
+</span>use std::collections::hash_map::{Entry, HashMap};
+
+#[derive(Debug)]
+enum Event { // 1
+    NewPeer {
+        name: String,
+        stream: Arc&lt;TcpStream&gt;,
+    },
+    Message {
+        from: String,
+        to: Vec&lt;String&gt;,
+        msg: String,
+    },
+}
+
+async fn broker_loop(mut events: Receiver&lt;Event&gt;) -&gt; Result&lt;()&gt; {
+    let mut peers: HashMap&lt;String, Sender&lt;String&gt;&gt; = HashMap::new(); // 2
+
+    while let Some(event) = events.next().await {
+        match event {
+            Event::Message { from, to, msg } =&gt; {  // 3
+                for addr in to {
+                    if let Some(peer) = peers.get_mut(&amp;addr) {
+                        let msg = format!(&quot;from {}: {}\n&quot;, from, msg);
+                        peer.send(msg).await?
+                    }
+                }
+            }
+            Event::NewPeer { name, stream } =&gt; {
+                match peers.entry(name) {
+                    Entry::Occupied(..) =&gt; (),
+                    Entry::Vacant(entry) =&gt; {
+                        let (client_sender, client_receiver) = mpsc::unbounded();
+                        entry.insert(client_sender); // 4
+                        spawn_and_log_error(connection_writer_loop(client_receiver, stream)); // 5
+                    }
+                }
+            }
+        }
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>代理人（<strong>Broker</strong>）应处理两种类型的事件：一个消息，或一个新端点的到来。</li>
+<li>代理人的内部状态是<code>HashMap</code>。请留意，在这里我们不需要<code>Mutex</code>，且可以自信地讲出，在代理人循环的每次迭代中，当前的端点集合(set of peers)是什么</li>
+<li>为了处理消息，我们通过 channel，将其发送到每个目的地</li>
+<li>为了处理新的 peer，我们首先在 peer 的 map 中，注册它...</li>
+<li>... 然后 spawn(孵) 一个专用任务（dedicated task），将消息实际写入 socket。</li>
+</ol>
+<h2><a class="header" href="#all-together" id="all-together">All Together</a></h2>
+<p>此时，我们只需要开始 broker，就可获得功能齐全的聊天室（在愉快的情况下！）：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span>use async_std::{
+    io::{self, BufReader},
+    net::{TcpListener, TcpStream, ToSocketAddrs},
+    prelude::*,
+    task,
+};
+use futures::channel::mpsc;
+use futures::SinkExt;
+use std::{
+    collections::hash_map::{HashMap, Entry},
+    sync::Arc,
+};
+
+type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+
+// main
+fn run() -&gt; Result&lt;()&gt; {
+    task::block_on(accept_loop(&quot;127.0.0.1:8080&quot;))
+}
+
+fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+where
+    F: Future&lt;Output = Result&lt;()&gt;&gt; + Send + 'static,
+{
+    task::spawn(async move {
+        if let Err(e) = fut.await {
+            eprintln!(&quot;{}&quot;, e)
+        }
+    })
+}
+
+async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; {
+    let listener = TcpListener::bind(addr).await?;
+
+    let (broker_sender, broker_receiver) = mpsc::unbounded(); // 1
+    let _broker_handle = task::spawn(broker_loop(broker_receiver));
+    let mut incoming = listener.incoming();
+    while let Some(stream) = incoming.next().await {
+        let stream = stream?;
+        println!(&quot;Accepting from: {}&quot;, stream.peer_addr()?);
+        spawn_and_log_error(connection_loop(broker_sender.clone(), stream));
+    }
+    Ok(())
+}
+
+async fn connection_loop(mut broker: Sender&lt;Event&gt;, stream: TcpStream) -&gt; Result&lt;()&gt; {
+    let stream = Arc::new(stream); // 2
+    let reader = BufReader::new(&amp;*stream);
+    let mut lines = reader.lines();
+
+    let name = match lines.next().await {
+        None =&gt; Err(&quot;peer disconnected immediately&quot;)?,
+        Some(line) =&gt; line?,
+    };
+    broker.send(Event::NewPeer { name: name.clone(), stream: Arc::clone(&amp;stream) }).await // 3
+        .unwrap();
+
+    while let Some(line) = lines.next().await {
+        let line = line?;
+        let (dest, msg) = match line.find(':') {
+            None =&gt; continue,
+            Some(idx) =&gt; (&amp;line[..idx], line[idx + 1 ..].trim()),
+        };
+        let dest: Vec&lt;String&gt; = dest.split(',').map(|name| name.trim().to_string()).collect();
+        let msg: String = msg.to_string();
+
+        broker.send(Event::Message { // 4
+            from: name.clone(),
+            to: dest,
+            msg,
+        }).await.unwrap();
+    }
+    Ok(())
+}
+
+async fn connection_writer_loop(
+    mut messages: Receiver&lt;String&gt;,
+    stream: Arc&lt;TcpStream&gt;,
+) -&gt; Result&lt;()&gt; {
+    let mut stream = &amp;*stream;
+    while let Some(msg) = messages.next().await {
+        stream.write_all(msg.as_bytes()).await?;
+    }
+    Ok(())
+}
+
+#[derive(Debug)]
+enum Event {
+    NewPeer {
+        name: String,
+        stream: Arc&lt;TcpStream&gt;,
+    },
+    Message {
+        from: String,
+        to: Vec&lt;String&gt;,
+        msg: String,
+    },
+}
+
+async fn broker_loop(mut events: Receiver&lt;Event&gt;) -&gt; Result&lt;()&gt; {
+    let mut peers: HashMap&lt;String, Sender&lt;String&gt;&gt; = HashMap::new();
+
+    while let Some(event) = events.next().await {
+        match event {
+            Event::Message { from, to, msg } =&gt; {
+                for addr in to {
+                    if let Some(peer) = peers.get_mut(&amp;addr) {
+                        let msg = format!(&quot;from {}: {}\n&quot;, from, msg);
+                        peer.send(msg).await?
+                    }
+                }
+            }
+            Event::NewPeer { name, stream} =&gt; {
+                match peers.entry(name) {
+                    Entry::Occupied(..) =&gt; (),
+                    Entry::Vacant(entry) =&gt; {
+                        let (client_sender, client_receiver) = mpsc::unbounded();
+                        entry.insert(client_sender); // 4
+                        spawn_and_log_error(connection_writer_loop(client_receiver, stream)); // 5
+                    }
+                }
+            }
+        }
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>在<code>accept_loop</code>里面，我们创建了 broker 的 channel，和<code>task</code>。</li>
+<li>在<code>connection_loop</code>里面，我们需要将<code>TcpStream</code>包进一个<code>Arc</code>，以便能够与<code>connection_writer_loop</code>共享它。</li>
+<li>登录后，我们会通知 broker。注意我们<code>.unwrap</code> on send： broker 应该比所有客户都长命，如果不是这种情况， broker 应该 panics，所以这个 panics 应该是致命的。</li>
+<li>同样，我们将已解析的消息转发给 broker，并假设该消息仍处于活动状态。</li>
+</ol>
+<h2><a class="header" href="#clean-shutdown" id="clean-shutdown">Clean Shutdown</a></h2>
+<p>当前实现的问题之一是，它无法处理正常关机。如果由于某种原因，我们的 接收 循环中断了，则所有正在进行的任务都将遗弃在地上。更正确的关闭顺序为：</p>
+<ol>
+<li>停止接受新客户</li>
+<li>传递所有未解决的（pending）消息</li>
+<li>退出程序</li>
+</ol>
+<p>基于 channel 的体系结构，其干净关闭很容易，尽管它一开始可能看起来很神奇。在 Rust 中，一旦所有发送端（senders）都被丢弃，通道的接收端（receiver）一侧就会关闭。也就是说，一旦生产者退出，并丢弃他们的发送端，系统的其余部分就会自然关闭。在<code>async_std</code>中，这套形式转化为两个规则：</p>
+<ol>
+<li>确保 channel 形成一个非循环图。</li>
+<li>注意以正确的顺序等待，直到系统的中间层处理 pending 消息。</li>
+</ol>
+<p>在<code>a-chat</code>，我们已经有一个单向消息流：<code>reader -&gt; broker -&gt; writer</code>。但是，我们从不等待 broker 和 writers，这可能会导致某些消息丢失。让我们添加等待，到服务器：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    io::{self, BufReader},
+</span><span class="boring">    net::{TcpListener, TcpStream, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">use futures::channel::mpsc;
+</span><span class="boring">use futures::SinkExt;
+</span><span class="boring">use std::{
+</span><span class="boring">    collections::hash_map::{HashMap, Entry},
+</span><span class="boring">    sync::Arc,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+</span><span class="boring">type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+</span><span class="boring">
+</span><span class="boring">fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+</span><span class="boring">where
+</span><span class="boring">    F: Future&lt;Output = Result&lt;()&gt;&gt; + Send + 'static,
+</span><span class="boring">{
+</span><span class="boring">    task::spawn(async move {
+</span><span class="boring">        if let Err(e) = fut.await {
+</span><span class="boring">            eprintln!(&quot;{}&quot;, e)
+</span><span class="boring">        }
+</span><span class="boring">    })
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">
+</span><span class="boring">async fn connection_loop(mut broker: Sender&lt;Event&gt;, stream: TcpStream) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let stream = Arc::new(stream); // 2
+</span><span class="boring">    let reader = BufReader::new(&amp;*stream);
+</span><span class="boring">    let mut lines = reader.lines();
+</span><span class="boring">
+</span><span class="boring">    let name = match lines.next().await {
+</span><span class="boring">        None =&gt; Err(&quot;peer disconnected immediately&quot;)?,
+</span><span class="boring">        Some(line) =&gt; line?,
+</span><span class="boring">    };
+</span><span class="boring">    broker.send(Event::NewPeer { name: name.clone(), stream: Arc::clone(&amp;stream) }).await // 3
+</span><span class="boring">        .unwrap();
+</span><span class="boring">
+</span><span class="boring">    while let Some(line) = lines.next().await {
+</span><span class="boring">        let line = line?;
+</span><span class="boring">        let (dest, msg) = match line.find(':') {
+</span><span class="boring">            None =&gt; continue,
+</span><span class="boring">            Some(idx) =&gt; (&amp;line[..idx], line[idx + 1 ..].trim()),
+</span><span class="boring">        };
+</span><span class="boring">        let dest: Vec&lt;String&gt; = dest.split(',').map(|name| name.trim().to_string()).collect();
+</span><span class="boring">        let msg: String = msg.trim().to_string();
+</span><span class="boring">
+</span><span class="boring">        broker.send(Event::Message { // 4
+</span><span class="boring">            from: name.clone(),
+</span><span class="boring">            to: dest,
+</span><span class="boring">            msg,
+</span><span class="boring">        }).await.unwrap();
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">async fn connection_writer_loop(
+</span><span class="boring">    mut messages: Receiver&lt;String&gt;,
+</span><span class="boring">    stream: Arc&lt;TcpStream&gt;,
+</span><span class="boring">) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let mut stream = &amp;*stream;
+</span><span class="boring">    while let Some(msg) = messages.next().await {
+</span><span class="boring">        stream.write_all(msg.as_bytes()).await?;
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">enum Event {
+</span><span class="boring">    NewPeer {
+</span><span class="boring">        name: String,
+</span><span class="boring">        stream: Arc&lt;TcpStream&gt;,
+</span><span class="boring">    },
+</span><span class="boring">    Message {
+</span><span class="boring">        from: String,
+</span><span class="boring">        to: Vec&lt;String&gt;,
+</span><span class="boring">        msg: String,
+</span><span class="boring">    },
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">async fn broker_loop(mut events: Receiver&lt;Event&gt;) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let mut peers: HashMap&lt;String, Sender&lt;String&gt;&gt; = HashMap::new();
+</span><span class="boring">
+</span><span class="boring">    while let Some(event) = events.next().await {
+</span><span class="boring">        match event {
+</span><span class="boring">            Event::Message { from, to, msg } =&gt; {
+</span><span class="boring">                for addr in to {
+</span><span class="boring">                    if let Some(peer) = peers.get_mut(&amp;addr) {
+</span><span class="boring">                        let msg = format!(&quot;from {}: {}\n&quot;, from, msg);
+</span><span class="boring">                        peer.send(msg).await?
+</span><span class="boring">                    }
+</span><span class="boring">                }
+</span><span class="boring">            }
+</span><span class="boring">            Event::NewPeer { name, stream} =&gt; {
+</span><span class="boring">                match peers.entry(name) {
+</span><span class="boring">                    Entry::Occupied(..) =&gt; (),
+</span><span class="boring">                    Entry::Vacant(entry) =&gt; {
+</span><span class="boring">                        let (client_sender, client_receiver) = mpsc::unbounded();
+</span><span class="boring">                        entry.insert(client_sender); // 4
+</span><span class="boring">                        spawn_and_log_error(connection_writer_loop(client_receiver, stream)); // 5
+</span><span class="boring">                    }
+</span><span class="boring">                }
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span>async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; {
+    let listener = TcpListener::bind(addr).await?;
+
+    let (broker_sender, broker_receiver) = mpsc::unbounded();
+    let broker_handle = task::spawn(broker_loop(broker_receiver));
+    let mut incoming = listener.incoming();
+    while let Some(stream) = incoming.next().await {
+        let stream = stream?;
+        println!(&quot;Accepting from: {}&quot;, stream.peer_addr()?);
+        spawn_and_log_error(connection_loop(broker_sender.clone(), stream));
+    }
+    drop(broker_sender); // 1
+    broker_handle.await?; // 5
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>还有向 broker 添加：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::{
+</span><span class="boring">    io::{self, BufReader},
+</span><span class="boring">    net::{TcpListener, TcpStream, ToSocketAddrs},
+</span><span class="boring">    prelude::*,
+</span><span class="boring">    task,
+</span><span class="boring">};
+</span><span class="boring">use futures::channel::mpsc;
+</span><span class="boring">use futures::SinkExt;
+</span><span class="boring">use std::{
+</span><span class="boring">    collections::hash_map::{HashMap, Entry},
+</span><span class="boring">    sync::Arc,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+</span><span class="boring">type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+</span><span class="boring">
+</span><span class="boring">async fn connection_writer_loop(
+</span><span class="boring">    mut messages: Receiver&lt;String&gt;,
+</span><span class="boring">    stream: Arc&lt;TcpStream&gt;,
+</span><span class="boring">) -&gt; Result&lt;()&gt; {
+</span><span class="boring">    let mut stream = &amp;*stream;
+</span><span class="boring">    while let Some(msg) = messages.next().await {
+</span><span class="boring">        stream.write_all(msg.as_bytes()).await?;
+</span><span class="boring">    }
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+</span><span class="boring">where
+</span><span class="boring">    F: Future&lt;Output = Result&lt;()&gt;&gt; + Send + 'static,
+</span><span class="boring">{
+</span><span class="boring">    task::spawn(async move {
+</span><span class="boring">        if let Err(e) = fut.await {
+</span><span class="boring">            eprintln!(&quot;{}&quot;, e)
+</span><span class="boring">        }
+</span><span class="boring">    })
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">enum Event {
+</span><span class="boring">    NewPeer {
+</span><span class="boring">        name: String,
+</span><span class="boring">        stream: Arc&lt;TcpStream&gt;,
+</span><span class="boring">    },
+</span><span class="boring">    Message {
+</span><span class="boring">        from: String,
+</span><span class="boring">        to: Vec&lt;String&gt;,
+</span><span class="boring">        msg: String,
+</span><span class="boring">    },
+</span><span class="boring">}
+</span><span class="boring">
+</span>async fn broker_loop(mut events: Receiver&lt;Event&gt;) -&gt; Result&lt;()&gt; {
+    let mut writers = Vec::new();
+    let mut peers: HashMap&lt;String, Sender&lt;String&gt;&gt; = HashMap::new();
+    while let Some(event) = events.next().await { // 2
+        match event {
+            Event::Message { from, to, msg } =&gt; {
+                for addr in to {
+                    if let Some(peer) = peers.get_mut(&amp;addr) {
+                        let msg = format!(&quot;from {}: {}\n&quot;, from, msg);
+                        peer.send(msg).await?
+                    }
+                }
+            }
+            Event::NewPeer { name, stream} =&gt; {
+                match peers.entry(name) {
+                    Entry::Occupied(..) =&gt; (),
+                    Entry::Vacant(entry) =&gt; {
+                        let (client_sender, client_receiver) = mpsc::unbounded();
+                        entry.insert(client_sender);
+                        let handle = spawn_and_log_error(connection_writer_loop(client_receiver, stream));
+                        writers.push(handle); // 4
+                    }
+                }
+            }
+        }
+    }
+    drop(peers); // 3
+    for writer in writers { // 4
+        writer.await;
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>注意一旦退出 accept 循环，所有 channel 都会发生下面情况：</p>
+<ol>
+<li>首先，我们弃掉 main broker 的 sender。这样，当 readers 完成时， broker 的 channel sender 就没有了，且 channel 关闭了。</li>
+<li>接下来， broker 退出<code>while let Some(event) = events.next().await</code>循环。</li>
+<li>至关重要的是，在此阶段，我们弃掉了<code>peers</code> map。这会弃掉 writer 的 senders。</li>
+<li>现在我们可以 join 所有 writers。</li>
+<li>最后，我们 join broker ，这也保证所有 write 操作都已终止。</li>
+</ol>
+<h2><a class="header" href="#handling-disconnections" id="handling-disconnections">Handling Disconnections</a></h2>
+<p>目前，我们只对 map 有，<em>添加</em>新 peers 的操作。这显然是错误的：如果一个 peer 关闭了与 chat 的连接，我们就不应尝试向其发送更多消息。</p>
+<p>处理断开连接的一个细微之处是，我们可以检测到，它是在 reader 的 task 中，还是在 writer 的 task 中。这里最显而易见的解决方案是：在两种情况下，试着仅将 peer 从<code>peers</code> map 中移除，但这是错误的。如果读取和写入（read and write）<em>两个</em>都失败，我们将会移除 peer 两次，但有种情况是，在两种错误之间， peer 重新连接上了！解决上面问题的思考是，我们仅在 write 端完结后，才移除 peer 。如果 read 端完结，我们将通知 write 端也应停止。也就是说，我们需要添加一项手段，发出信号，以关闭 writer task。</p>
+<p>解决这个问题的一种方法是<code>shutdown: Receiver&lt;()&gt;</code> channel。但是，有一个更小的解决方案，它可以巧妙地使用 RAII。 shutdown channel 是一个同步事件，因此我们不需要发送一个 shutdown 消息，只需丢弃 sender 即可。这样，即使我们的<code>?</code>或 panics 提前返回，我们也能坐享其成地确定，发出 shutdown 仅一次。</p>
+<p>首先，让我们向<code>connection_loop</code>，添加一个 shutdown channel：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::net::TcpStream;
+</span><span class="boring">use futures::channel::mpsc;
+</span><span class="boring">use futures::SinkExt;
+</span><span class="boring">use std::sync::Arc;
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+</span><span class="boring">type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+</span><span class="boring">
+</span>#[derive(Debug)]
+enum Void {} // 1
+
+#[derive(Debug)]
+enum Event {
+    NewPeer {
+        name: String,
+        stream: Arc&lt;TcpStream&gt;,
+        shutdown: Receiver&lt;Void&gt;, // 2
+    },
+    Message {
+        from: String,
+        to: Vec&lt;String&gt;,
+        msg: String,
+    },
+}
+
+async fn connection_loop(mut broker: Sender&lt;Event&gt;, stream: Arc&lt;TcpStream&gt;) -&gt; Result&lt;()&gt; {
+    // ...
+<span class="boring">  let name: String = unimplemented!();
+</span>    let (_shutdown_sender, shutdown_receiver) = mpsc::unbounded::&lt;Void&gt;(); // 3
+    broker.send(Event::NewPeer {
+        name: name.clone(),
+        stream: Arc::clone(&amp;stream),
+        shutdown: shutdown_receiver,
+    }).await.unwrap();
+    // ...
+<span class="boring">  unimplemented!()
+</span>}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>为了强制信息不通过 shutdown channel 发送，我们使用了仅作标记的类型。</li>
+<li>我们将 shutdown channel 传递给 writer task</li>
+<li>在 reader 中，我们创建了一个<code>_shutdown_sender</code>，其唯一的目的就是 get dropped。</li>
+</ol>
+<p>在<code>connection_writer_loop</code>里面，我们现在需要在 shutdown 和 message channel 之间进行选择。为此，我们使用<code>select</code>宏：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span><span class="boring">use async_std::{net::TcpStream, prelude::*};
+</span>use futures::channel::mpsc;
+use futures::{select, FutureExt};
+<span class="boring">use std::sync::Arc;
+</span>
+<span class="boring">type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+</span><span class="boring">type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+</span>
+<span class="boring">#[derive(Debug)]
+</span><span class="boring">enum Void {} // 1
+</span>
+async fn connection_writer_loop(
+    messages: &amp;mut Receiver&lt;String&gt;,
+    stream: Arc&lt;TcpStream&gt;,
+    shutdown: Receiver&lt;Void&gt;, // 1
+) -&gt; Result&lt;()&gt; {
+    let mut stream = &amp;*stream;
+    let mut messages = messages.fuse();
+    let mut shutdown = shutdown.fuse();
+    loop { // 2
+        select! {
+            msg = messages.next().fuse() =&gt; match msg {
+                Some(msg) =&gt; stream.write_all(msg.as_bytes()).await?,
+                None =&gt; break,
+            },
+            void = shutdown.next().fuse() =&gt; match void {
+                Some(void) =&gt; match void {}, // 3
+                None =&gt; break,
+            }
+        }
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>我们添加 shutdown channel 作为参数。</li>
+<li>因为<code>select</code>，我们不能使用<code>while let</code>循环，所以我们将其 desugar(解语法糖) 到 <code>loop</code>。</li>
+<li>在 shutdown 案例下，我们使用<code>match void {}</code>作为静态检查版的<code>unreachable!()</code>。</li>
+</ol>
+<p>另一个问题是，新的信息可能会被推进 peer 的 channel，这问题发生的时机是，在我们在<code>connection_writer_loop</code>检测到 disconnection(断连)，和我们实际上从<code>peers</code> map 中移除这个 peer 之间。为了不完全失去这些消息，我们将 message channel 返回给 broker。这也使我们能够建立一个有用的不变式，message channel 在<code>peers</code> map 中，是严格要求’长命’过这个 peer 的，并使 broker 本身处于无法失败的状态。</p>
+<h2><a class="header" href="#final-code" id="final-code">Final Code</a></h2>
+<p>最终代码如下所示：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span>use async_std::{
+    io::BufReader,
+    net::{TcpListener, TcpStream, ToSocketAddrs},
+    prelude::*,
+    task,
+};
+use futures::channel::mpsc;
+use futures::{select, FutureExt, SinkExt};
+use std::{
+    collections::hash_map::{Entry, HashMap},
+    future::Future,
+    sync::Arc,
+};
+
+type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+type Sender&lt;T&gt; = mpsc::UnboundedSender&lt;T&gt;;
+type Receiver&lt;T&gt; = mpsc::UnboundedReceiver&lt;T&gt;;
+
+#[derive(Debug)]
+enum Void {}
+
+// main
+fn run() -&gt; Result&lt;()&gt; {
+    task::block_on(accept_loop(&quot;127.0.0.1:8080&quot;))
+}
+
+async fn accept_loop(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; {
+    let listener = TcpListener::bind(addr).await?;
+    let (broker_sender, broker_receiver) = mpsc::unbounded();
+    let broker_handle = task::spawn(broker_loop(broker_receiver));
+    let mut incoming = listener.incoming();
+    while let Some(stream) = incoming.next().await {
+        let stream = stream?;
+        println!(&quot;Accepting from: {}&quot;, stream.peer_addr()?);
+        spawn_and_log_error(connection_loop(broker_sender.clone(), stream));
+    }
+    drop(broker_sender);
+    broker_handle.await;
+    Ok(())
+}
+
+async fn connection_loop(mut broker: Sender&lt;Event&gt;, stream: TcpStream) -&gt; Result&lt;()&gt; {
+    let stream = Arc::new(stream);
+    let reader = BufReader::new(&amp;*stream);
+    let mut lines = reader.lines();
+
+    let name = match lines.next().await {
+        None =&gt; Err(&quot;peer disconnected immediately&quot;)?,
+        Some(line) =&gt; line?,
+    };
+    let (_shutdown_sender, shutdown_receiver) = mpsc::unbounded::&lt;Void&gt;();
+    broker.send(Event::NewPeer {
+        name: name.clone(),
+        stream: Arc::clone(&amp;stream),
+        shutdown: shutdown_receiver,
+    }).await.unwrap();
+
+    while let Some(line) = lines.next().await {
+        let line = line?;
+        let (dest, msg) = match line.find(':') {
+            None =&gt; continue,
+            Some(idx) =&gt; (&amp;line[..idx], line[idx + 1 ..].trim()),
+        };
+        let dest: Vec&lt;String&gt; = dest.split(',').map(|name| name.trim().to_string()).collect();
+        let msg: String = msg.trim().to_string();
+
+        broker.send(Event::Message {
+            from: name.clone(),
+            to: dest,
+            msg,
+        }).await.unwrap();
+    }
+
+    Ok(())
+}
+
+async fn connection_writer_loop(
+    messages: &amp;mut Receiver&lt;String&gt;,
+    stream: Arc&lt;TcpStream&gt;,
+    shutdown: Receiver&lt;Void&gt;,
+) -&gt; Result&lt;()&gt; {
+    let mut stream = &amp;*stream;
+    let mut messages = messages.fuse();
+    let mut shutdown = shutdown.fuse();
+    loop {
+        select! {
+            msg = messages.next().fuse() =&gt; match msg {
+                Some(msg) =&gt; stream.write_all(msg.as_bytes()).await?,
+                None =&gt; break,
+            },
+            void = shutdown.next().fuse() =&gt; match void {
+                Some(void) =&gt; match void {},
+                None =&gt; break,
+            }
+        }
+    }
+    Ok(())
+}
+
+#[derive(Debug)]
+enum Event {
+    NewPeer {
+        name: String,
+        stream: Arc&lt;TcpStream&gt;,
+        shutdown: Receiver&lt;Void&gt;,
+    },
+    Message {
+        from: String,
+        to: Vec&lt;String&gt;,
+        msg: String,
+    },
+}
+
+async fn broker_loop(events: Receiver&lt;Event&gt;) {
+    let (disconnect_sender, mut disconnect_receiver) = // 1
+        mpsc::unbounded::&lt;(String, Receiver&lt;String&gt;)&gt;();
+    let mut peers: HashMap&lt;String, Sender&lt;String&gt;&gt; = HashMap::new();
+    let mut events = events.fuse();
+    loop {
+        let event = select! {
+            event = events.next().fuse() =&gt; match event {
+                None =&gt; break, // 2
+                Some(event) =&gt; event,
+            },
+            disconnect = disconnect_receiver.next().fuse() =&gt; {
+                let (name, _pending_messages) = disconnect.unwrap(); // 3
+                assert!(peers.remove(&amp;name).is_some());
+                continue;
+            },
+        };
+        match event {
+            Event::Message { from, to, msg } =&gt; {
+                for addr in to {
+                    if let Some(peer) = peers.get_mut(&amp;addr) {
+                        let msg = format!(&quot;from {}: {}\n&quot;, from, msg);
+                        peer.send(msg).await
+                            .unwrap() // 6
+                    }
+                }
+            }
+            Event::NewPeer { name, stream, shutdown } =&gt; {
+                match peers.entry(name.clone()) {
+                    Entry::Occupied(..) =&gt; (),
+                    Entry::Vacant(entry) =&gt; {
+                        let (client_sender, mut client_receiver) = mpsc::unbounded();
+                        entry.insert(client_sender);
+                        let mut disconnect_sender = disconnect_sender.clone();
+                        spawn_and_log_error(async move {
+                            let res = connection_writer_loop(&amp;mut client_receiver, stream, shutdown).await;
+                            disconnect_sender.send((name, client_receiver)).await // 4
+                                .unwrap();
+                            res
+                        });
+                    }
+                }
+            }
+        }
+    }
+    drop(peers); // 5
+    drop(disconnect_sender); // 6
+    while let Some((_name, _pending_messages)) = disconnect_receiver.next().await {
+    }
+}
+
+fn spawn_and_log_error&lt;F&gt;(fut: F) -&gt; task::JoinHandle&lt;()&gt;
+where
+    F: Future&lt;Output = Result&lt;()&gt;&gt; + Send + 'static,
+{
+    task::spawn(async move {
+        if let Err(e) = fut.await {
+            eprintln!(&quot;{}&quot;, e)
+        }
+    })
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>在 broker 中，我们创建一个 channel，来获取断开连接的 peer，及其未传递的消息。</li>
+<li>当输入事件 channel 耗尽时（即，所有 readers 退出时）， broker 的 main 循环退出。</li>
+<li>因为 broker 本身持有一个<code>disconnect_sender</code>，我们就知道在 main 循环中的 disconnections channel，无法完全排掉。</li>
+<li>我们将 peer 的 name 和待处理消息（pending messages），发送到 disconnections channel ，这里有两条路径，一条快乐，一条不是太快乐(in both the happy and the not-so-happy path)。
+同样，我们可以安全地 unwrap，因为 broker 的生命周期是超过 writers 的。</li>
+<li>我们 drop <code>peers</code> map ，以关闭 writers 的 message channel ，并确定关闭 writers。
+在当前设置中， broker 等待 reader 的关闭，其实并不是绝对必要的。但是，如果我们要添加一个 server-initiated shutdown（例如，kbd：[ctrl+c] 处理），这将是 broker 关闭 writers 的一种方式。</li>
+<li>最后，我们关闭，并排干 disconnections channel 。</li>
+</ol>
+<h2><a class="header" href="#implementing-a-client" id="implementing-a-client">Implementing a client</a></h2>
+<p>现在让我们实现聊天的客户端。因为该协议是基于行（line-based）的，所以实现非常简单：</p>
+<ul>
+<li>从 stdin 读取的行，应通过 socket 发送。</li>
+<li>从 socket 读取的行，应回显到 stdout。</li>
+</ul>
+<p>与服务器不同，客户端仅需要有限的并发性，因为它仅与单个用户进行交互。因此，在这种情况下，异步不会带来很多性能优势。</p>
+<p>但是，异步对于管理并发仍然很有用！具体来说，客户应<em>同时</em>从 stdin 和 socket 中读取(信息)。使用线程对此进行编程非常麻烦，尤其是要干净关机时。使用异步，我们可以只用<code>select!</code>宏就可以了。</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">extern crate futures;
+</span>use async_std::{
+    io::{stdin, BufReader},
+    net::{TcpStream, ToSocketAddrs},
+    prelude::*,
+    task,
+};
+use futures::{select, FutureExt};
+
+type Result&lt;T&gt; = std::result::Result&lt;T, Box&lt;dyn std::error::Error + Send + Sync&gt;&gt;;
+
+// main
+fn run() -&gt; Result&lt;()&gt; {
+    task::block_on(try_run(&quot;127.0.0.1:8080&quot;))
+}
+
+async fn try_run(addr: impl ToSocketAddrs) -&gt; Result&lt;()&gt; {
+    let stream = TcpStream::connect(addr).await?;
+    let (reader, mut writer) = (&amp;stream, &amp;stream); // 1
+    let mut lines_from_server = BufReader::new(reader).lines().fuse(); // 2
+    let mut lines_from_stdin = BufReader::new(stdin()).lines().fuse(); // 2
+    loop {
+        select! { // 3
+            line = lines_from_server.next().fuse() =&gt; match line {
+                Some(line) =&gt; {
+                    let line = line?;
+                    println!(&quot;{}&quot;, line);
+                },
+                None =&gt; break,
+            },
+            line = lines_from_stdin.next().fuse() =&gt; match line {
+                Some(line) =&gt; {
+                    let line = line?;
+                    writer.write_all(line.as_bytes()).await?;
+                    writer.write_all(b&quot;\n&quot;).await?;
+                }
+                None =&gt; break,
+            }
+        }
+    }
+    Ok(())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol>
+<li>在这里，我们将<code>TcpStream</code>分为了，一半 read 和一半 write ：这里的<code>impl AsyncRead for &amp;'_ TcpStream</code>，就像 std 中的那个一样。</li>
+<li>我们为 socket 和 stdin 创建了行的数据流(a stream of lines)。</li>
+<li>在 main select 循环中，我们打印从服务器接收的 lines，并发送从控制台读取到的 lines。</li>
+</ol>
+<h1><a class="header" href="#patterns" id="patterns">Patterns</a></h1>
+<p>本节介绍了一些有用的小模式。</p>
+<p>本手册旨在让您一目了然地阅读，以便您在遇到问题时可以回去。</p>
+<h1><a class="header" href="#small-patterns" id="small-patterns">Small Patterns</a></h1>
+<p>小而有用的模式的集合。</p>
+<h2><a class="header" href="#splitting-streams" id="splitting-streams">Splitting streams</a></h2>
+<p><code>async-std</code>没有提供<code>split()</code>方法开启<code>io</code>处理。相反，可以将流分成读写部分，如下所示：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span>use async_std::{io, net::TcpStream};
+async fn echo(stream: TcpStream) {
+    let (reader, writer) = &amp;mut (&amp;stream, &amp;stream);
+    io::copy(reader, writer).await;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h1><a class="header" href="#security" id="security">Security</a></h1>
+<p>编写高性能的异步核心库是，一项涉及一些不安全代码实例的任务。</p>
+<p>我们非常谨慎地审核<code>async-std</code>其中包含的所有不安全代码，并遵循公认的惯例。</p>
+<p>如果您在我们的库中发现了与安全相关的错误，请与我们<a href="security//security/policy.zh">security contact</a>联系。</p>
+<p><a href="https://github.com/async-rs">github org</a>很高兴地接受，提高库的弹性或测试设置的补丁，。</p>
+<h1><a class="header" href="#policy" id="policy">Policy</a></h1>
+<p>安全是我们所做工作的核心原则之一，为此，我们要确保 async-std 具有安全的实现。感谢您抽出宝贵的时间，透露您发现的任何问题。</p>
+<p>async-std 发行版中，所有安全错误应通过电子邮件报告至 florian.gilcher@ferrous-systems.com 。列表已交付给小型安全团队。我们会在 24 小时内确认您的电子邮件，并且会在 48 小时内，收到对电子邮件的详细回复，指示您处理报告的后续步骤。如果您愿意，您可以使用我们的公钥加密报告。该密钥也位于 MIT 的密钥服务器上，复制如下。</p>
+<p>确保使用一行，来描述主题，以免你的报告被错过。在对您的报告进行初次答复后，安全团队努力使您，了解有关修复和完整公告的进展情况。正如<a href="https://en.wikipedia.org/wiki/RFPolicy">RFPolicy</a>所推荐的，这些更新至少每五天发送一次。实际上，更有可能是每 24-48 小时一次。</p>
+<p>如果您在 48 小时内，未收到对电子邮件的答复，或者在过去五天内没有收到安全团队的来信，则可以采取一些步骤（按顺序）：</p>
+<ul>
+<li>在我们的社区论坛上发帖</li>
+</ul>
+<p>请注意，讨论论坛是公共区域。在错误补丁更新过程，请勿讨论您的 issue。只需说，您正在设法与安全团队联系。</p>
+<h2><a class="header" href="#disclosure-policy" id="disclosure-policy">Disclosure policy</a></h2>
+<p>async-std 项目具有 5 个步骤的公开过程。</p>
+<ul>
+<li>The security report is received and is assigned a primary handler. This person will coordinate the fix and release process.</li>
+<li>The problem is confirmed and a list of all affected versions is determined.</li>
+<li>Code is audited to find any potential similar problems.</li>
+<li>Fixes are prepared for all releases which are still under maintenance. These fixes are not committed to the public repository but rather held locally pending the announcement.</li>
+<li>On the embargo date, the changes are pushed to the public repository and new builds are deployed to crates.io. Within 6 hours, a copy of the advisory will be published on the the async.rs blog.</li>
+</ul>
+<p>此过程可能需要一些时间，特别是在需要与其他项目的维护者进行协调时。我们将尽一切努力尽快解决该错误，但是，请务必遵循上面的发布流程，以确保以一致的方式处理该披露，这一点很重要。</p>
+<h2><a class="header" href="#credits-1" id="credits-1">Credits</a></h2>
+<p>该政策是根据<a href="https://www.rust-lang.org/policies/security">Rust project</a>安全政策。</p>
+<h2><a class="header" href="#pgp-key" id="pgp-key">PGP Key</a></h2>
+<pre><code class="language-text">-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQENBF1Wu/ABCADJaGt4HwSlqKB9BGHWYKZj/6mTMbmc29vsEOcCSQKo6myCf9zc
+sasWAttep4FAUDX+MJhVbBTSq9M1YVxp33Qh5AF0t9SnJZnbI+BZuGawcHDL01xE
+bE+8bcA2+szeTTUZCeWwsaoTd/2qmQKvpUCBQp7uBs/ITO/I2q7+xCGXaOHZwUKc
+H8SUBLd35nYFtjXAeejoZVkqG2qEjrc9bkZAwxFXi7Fw94QdkNLaCjNfKxZON/qP
+A3WOpyWPr3ERk5C5prjEAvrW8kdqpTRjdmzQjsr8UEXb5GGEOo93N4OLZVQ2mXt9
+dfn++GOnOk7sTxvfiDH8Ru5o4zCtKgO+r5/LABEBAAG0UkZsb3JpYW4gR2lsY2hl
+ciAoU2VjdXJpdHkgY29udGFjdCBhc3luYy1zdGQpIDxmbG9yaWFuLmdpbGNoZXJA
+ZmVycm91cy1zeXN0ZW1zLmNvbT6JATgEEwECACIFAl1Wu/ACGwMGCwkIBwMCBhUI
+AgkKCwQWAgMBAh4BAheAAAoJEACXY97PwLtSc0AH/18yvrElVOkG0ADWX7l+JKHH
+nMQtYj0Auop8d6TuKBbpwtYhwELrQoITDMV7f2XEnchNsvYxAyBZhIISmXeJboE1
+KzZD1O+4QPXRcXhj+QNsKQ680mrgZXgAI2Y4ptIW9Vyw3jiHu/ZVopvDAt4li+up
+3fRJGPAvGu+tclpJmA+Xam23cDj89M7/wHHgKIyT59WgFwyCgibL+NHKwg2Unzou
+9uyZQnq6hf62sQTWEZIAr9BQpKmluplNIJHDeECWzZoE9ucE2ZXsq5pq9qojsAMK
+yRdaFdpBcD/AxtrTKFeXGS7X7LqaljY/IFBEdJOqVNWpqSLjGWqjSLIEsc1AB0K5
+AQ0EXVa78AEIAJMxBOEEW+2c3CcjFuUfcRsoBsFH3Vk+GwCbjIpNHq/eAvS1yy2L
+u10U5CcT5Xb6be3AeCYv00ZHVbEi6VwoauVCSX8qDjhVzQxvNLgQ1SduobjyF6t8
+3M/wTija6NvMKszyw1l2oHepxSMLej1m49DyCDFNiZm5rjQcYnFT4J71syxViqHF
+v2fWCheTrHP3wfBAt5zyDet7IZd/EhYAK6xXEwr9nBPjfbaVexm2B8K6hOPNj0Bp
+OKm4rcOj7JYlcxrwhMvNnwEue7MqH1oXAsoaC1BW+qs4acp/hHpesweL6Rcg1pED
+OJUQd3UvRsqRK0EsorDu0oj5wt6Qp3ZEbPMAEQEAAYkBHwQYAQIACQUCXVa78AIb
+DAAKCRAAl2Pez8C7Uv8bB/9scRm2wvzHLbFtcEHaHvlKO1yYfSVqKqJzIKHc7pM2
++szM8JVRTxAbzK5Xih9SB5xlekixxO2UCJI5DkJ/ir/RCcg+/CAQ8iLm2UcYAgJD
+TocKiR5gjNAvUDI4tMrDLLdF+7+RCQGc7HBSxFiNBJVGAztGVh1+cQ0zaCX6Tt33
+1EQtyRcPID0m6+ip5tCJN0dILC0YcwzXGrSgjB03JqItIyJEucdQz6UB84TIAGku
+JJl4tktgD9T7Rb5uzRhHCSbLy89DQVvCcKD4B94ffuDW3HO8n8utDusOiZuG4BUf
+WdFy6/gTLNiFbTzkq1BBJQMN1nBwGs1sn63RRgjumZ1N
+=dIcF
+-----END PGP PUBLIC KEY BLOCK-----
+</code></pre>
+<h1><a class="header" href="#glossary" id="glossary">Glossary</a></h1>
+<h3><a class="header" href="#blocking-1" id="blocking-1">blocking</a></h3>
+<p>“blocked(阻塞)”通常是指，使任务无法执行其工作的情况。例如，在继续操作之前，可能需要客户端发送数据。通常，当任务被阻塞时，将安排其他任务。</p>
+<p>有时您会听到：您永远不要在异步上下文中，调用“阻塞函数”。这指的是，阻塞当前线程，并且不 yield 控制权的函数。这使得 executor 无法使用该线程，来规划另一个任务。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+        <!-- Google Analytics Tag -->
+        <script type="text/javascript">
+            var localAddrs = ["localhost", "127.0.0.1", ""];
+
+            // make sure we don't activate google analytics if the developer is
+            // inspecting the book locally...
+            if (localAddrs.indexOf(document.location.hostname) === -1) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-128555056-1', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="custom.js"></script>
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

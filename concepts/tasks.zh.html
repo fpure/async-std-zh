@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Tasks - 使用 async-std 在 Rust 中进行异步编程</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Async programming in Rust with async-std">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="../introduction.zh.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="expanded "><a href="../overview/async-std.zh.html"><strong aria-hidden="true">1.1.</strong> 欢迎来到async-std！</a></li><li class="expanded "><a href="../overview/std-and-library-futures.zh.html"><strong aria-hidden="true">1.2.</strong> std::future和futures-rs</a></li><li class="expanded "><a href="../overview/stability-guarantees.zh.html"><strong aria-hidden="true">1.3.</strong> 稳定性保证</a></li></ol></li><li class="expanded "><a href="../concepts.zh.html"><strong aria-hidden="true">2.</strong> 使用 async-std 的异步概念</a></li><li><ol class="section"><li class="expanded "><a href="../concepts/futures.zh.html"><strong aria-hidden="true">2.1.</strong> Futures</a></li><li class="expanded "><a href="../concepts/tasks.zh.html" class="active"><strong aria-hidden="true">2.2.</strong> Tasks</a></li><li class="expanded "><a href="../concepts/async-read-write.zh.html"><strong aria-hidden="true">2.3.</strong> TODO：异步读/写</a></li><li class="expanded "><a href="../concepts/streams.zh.html"><strong aria-hidden="true">2.4.</strong> TODO：Streams and Channels</a></li></ol></li><li class="expanded "><a href="../tutorial/index.zh.html"><strong aria-hidden="true">3.</strong> 教程：实现聊天</a></li><li><ol class="section"><li class="expanded "><a href="../tutorial/specification.zh.html"><strong aria-hidden="true">3.1.</strong> 规格和入门</a></li><li class="expanded "><a href="../tutorial/accept_loop.zh.html"><strong aria-hidden="true">3.2.</strong> 编写一个 Accept 循环</a></li><li class="expanded "><a href="../tutorial/receiving_messages.zh.html"><strong aria-hidden="true">3.3.</strong> 接收讯息</a></li><li class="expanded "><a href="../tutorial/sending_messages.zh.html"><strong aria-hidden="true">3.4.</strong> 发送讯息</a></li><li class="expanded "><a href="../tutorial/connecting_readers_and_writers.zh.html"><strong aria-hidden="true">3.5.</strong> 连接读者和作家</a></li><li class="expanded "><a href="../tutorial/all_together.zh.html"><strong aria-hidden="true">3.6.</strong> 全部一起来</a></li><li class="expanded "><a href="../tutorial/clean_shutdown.zh.html"><strong aria-hidden="true">3.7.</strong> 干净地关机</a></li><li class="expanded "><a href="../tutorial/handling_disconnection.zh.html"><strong aria-hidden="true">3.8.</strong> 处理断开连接</a></li><li class="expanded "><a href="../tutorial/implementing_a_client.zh.html"><strong aria-hidden="true">3.9.</strong> 实现一个 Client</a></li></ol></li><li class="expanded "><a href="../patterns.zh.html"><strong aria-hidden="true">4.</strong> TODO：异步模式</a></li><li><ol class="section"><li class="expanded "><a href="../patterns/small-patterns.zh.html"><strong aria-hidden="true">4.1.</strong> TODO：收集的小模式</a></li></ol></li><li class="expanded "><a href="../security/index.zh.html"><strong aria-hidden="true">5.</strong> 安全实践</a></li><li><ol class="section"><li class="expanded "><a href="../security/policy.zh.html"><strong aria-hidden="true">5.1.</strong> 安全披露和政策</a></li></ol></li><li class="expanded "><a href="../glossary.zh.html"><strong aria-hidden="true">6.</strong> 术语</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">使用 async-std 在 Rust 中进行异步编程</h1>
+
+                        <div class="right-buttons">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#tasks" id="tasks">Tasks</a></h1>
+<p>既然我们知道 Future 是什么，就想要撸它！</p>
+<p>在<code>async-std</code>，<a href="https://docs.rs/async-std/latest/async_std/task/index.html"><code>tasks</code></a>模块负责这项行为。最简单的方法是使用<code>block_on</code>函数：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018"><span class="boring">extern crate async_std;
+</span>use async_std::{fs::File, io, prelude::*, task};
+
+async fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(path).await?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents).await?;
+    Ok(contents)
+}
+
+fn main() {
+    let reader_task = task::spawn(async {
+        let result = read_file(&quot;data.csv&quot;).await;
+        match result {
+            Ok(s) =&gt; println!(&quot;{}&quot;, s),
+            Err(e) =&gt; println!(&quot;Error reading file: {:?}&quot;, e)
+        }
+    });
+    println!(&quot;Started task!&quot;);
+    task::block_on(reader_task);
+    println!(&quot;Stopped task!&quot;);
+}
+</code></pre></pre>
+<p>这就要求 runtime 先放进<code>async_std</code>烤一烤，再去执行这份会读取文件的代码。不过停一停，让我们一个个来，从内到外。</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::{fs::File, io, prelude::*, task};
+</span><span class="boring">
+</span><span class="boring">async fn read_file(path: &amp;str) -&gt; io::Result&lt;String&gt; {
+</span><span class="boring">    let mut file = File::open(path).await?;
+</span><span class="boring">    let mut contents = String::new();
+</span><span class="boring">    file.read_to_string(&amp;mut contents).await?;
+</span><span class="boring">    Ok(contents)
+</span><span class="boring">}
+</span><span class="boring">
+</span>async {
+    let result = read_file(&quot;data.csv&quot;).await;
+    match result {
+        Ok(s) =&gt; println!(&quot;{}&quot;, s),
+        Err(e) =&gt; println!(&quot;Error reading file: {:?}&quot;, e)
+    }
+};
+<span class="boring">}
+</span></code></pre></pre>
+<p>这是一个<code>async</code> <em>代码块(block)</em>。 async block 是调用<code>async</code>函数的必要条件，所以同样，还会指示编译器，去包括所有相关指令。在 Rust 中，所有 block 都返回一个值，并且<code>async</code> block 就是会返回<code>Future</code>值。</p>
+<p>但让我们来看看有趣的部分：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>task::spawn(async { });
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>spawn</code>拿了一个<code>Future</code>，并在<code>Task</code>上开始 running。它返回一个<code>JoinHandle</code>。 这时的 Future 在 Rust 社区中，有时被称为<em>冻(cold)</em> Futures。你需要一些东西来管理/激活他们。为了运行一个 Future，可能需要一些额外的记录信息，例如，它是 running 还是完成的状态，和它放在内存中的位置以及当前的状态。这个记录部分被抽象成<code>Task</code>。</p>
+<p>一个<code>Task</code>类似于<code>Thread</code>，但有一些小的区别：它将由程序，而不是操作系统内核调度，如果遇到需要等待(wait)的点，程序本身承担起再次唤醒它的负责 —— 这个我们稍后再谈。一个<code>async_std</code> task 也可以有一个 name 和一个 ID，就像线程一样。</p>
+<p>现在，已给出足够的知识了：你知道了，一旦<code>spawn</code>(生)出一个 task，它将继续在后台运行。这个<code>JoinHandle</code>它本身就是一个 Future，一旦<code>Task</code>已经接近完成了，自然跟随着完成。这与<code>threads</code>以及<code>join</code>函数很像，我们现在可以通过在’控制杆’上调用<code>block_on</code>，<em>阻塞</em>程序（或调用线程，具体来说的话）并等待它完成。</p>
+<h2><a class="header" href="#tasks-in-async_std" id="tasks-in-async_std">Tasks in <code>async_std</code></a></h2>
+<p><code>async_std</code>中的 Tasks 是核心抽象之一。很像 Rust 的<code>thread</code>，他们在原始概念的基础上，提供了一些实用的函数。<code>Tasks</code>与 runtime 之间存有关系，但它们本身是独立的。<code>async_std</code>任务具有许多理想的特性：</p>
+<ul>
+<li>它们被分配到一个单独的分配(single allocation)中</li>
+<li>所有 tasks 都有<em>后门通道</em>，它允许它们通过<code>JoinHandle</code> 传播 results 和 errors 到那 spawning task。</li>
+<li>它们为调试提供了有用的元数据</li>
+<li>它们支持 task 本地存储</li>
+</ul>
+<p><code>async_std</code>的 task API 为您处理，一个后台的 runtime 的设置和拆卸，而不用依赖于一个显式启动的 runtime。</p>
+<h2><a class="header" href="#blocking" id="blocking">Blocking</a></h2>
+<p>假设，<code>Task</code>是<em>同时</em>运行的，(可能)具有共享执行的潜在线程。这意味着，能够阻塞<em>操作系统线程</em>的操作，例如<code>std::thread::sleep</code>或是 Rust <code>std</code> 库的 io 函数，会让<em>共享此线程的所有 tasks，停止执行</em>。其他库（如数据库驱动程序）也有类似的行为。请注意<em>阻塞当前线程</em>它本身并不是不良行为，只是与<code>async-std</code>的并发执行模型不能混用。本质上来说，千万不要这样做：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018"><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>fn main() {
+    task::block_on(async {
+        // this is std::fs, which blocks
+        std::fs::read_to_string(&quot;test_file&quot;);
+    })
+}
+</code></pre></pre>
+<p>如果要混合不同操作，请考虑将这些阻塞操作，放在单独的<code>thread</code>上。</p>
+<h2><a class="header" href="#errors-and-panics" id="errors-and-panics">Errors and panics</a></h2>
+<p>Tasks 通过正常模式报告错误：如果它们是错误的，那么它们的<code>Output</code>应该是某<code>Result&lt;T,E&gt;</code>类型。</p>
+<p>万一<code>panic</code>，行为的不同之处取决于，是否有一个合理的部分处理<code>panic</code>。 如果没有，程序<em>中止</em>.</p>
+<p>实际上，这意味着，<code>block_on</code>会将 panics 传播到阻塞组件：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018 should_panic"><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span>fn main() {
+    task::block_on(async {
+        panic!(&quot;test&quot;);
+    });
+}
+</code></pre></pre>
+<pre><code class="language-text">thread 'async-task-driver' panicked at 'test', examples/panic.rs:8:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+</code></pre>
+<p>在 panicing 阶段，一个 spawned task 将中止：</p>
+<pre><pre class="playpen"><code class="language-rust edition2018 should_panic">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span><span class="boring">extern crate async_std;
+</span><span class="boring">use async_std::task;
+</span><span class="boring">use std::time::Duration;
+</span>task::spawn(async {
+    panic!(&quot;test&quot;);
+});
+
+task::block_on(async {
+    task::sleep(Duration::from_millis(10000)).await;
+})
+<span class="boring">}
+</span></code></pre></pre>
+<pre><code class="language-text">thread 'async-task-driver' panicked at 'test', examples/panic.rs:8:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+Aborted (core dumped)
+</code></pre>
+<p>一开始这可能看起来很奇怪，但另一个选择是默默忽略 spawned task 中的 panics。当前的行为是可以改变的，具体通过捕获 spawned task 中的 panics，并用自定义行为对其作出反应。这为用户提供了，处理 panics 策略的选择。</p>
+<h2><a class="header" href="#conclusion" id="conclusion">Conclusion</a></h2>
+<p><code>async_std</code>附带一个有用的<code>Task</code>类型，与<code>std::thread</code> API 类似。 它以结构化和明确性的方式，涵盖了错误和 panics 行为。</p>
+<p>Tasks 作为独立的并发单元，有时，它们之间是需要通信的。这个 moment，<code>Stream</code>出现了。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../concepts/futures.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../concepts/async-read-write.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../concepts/futures.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../concepts/async-read-write.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+        <!-- Google Analytics Tag -->
+        <script type="text/javascript">
+            var localAddrs = ["localhost", "127.0.0.1", ""];
+
+            // make sure we don't activate google analytics if the developer is
+            // inspecting the book locally...
+            if (localAddrs.indexOf(document.location.hostname) === -1) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-128555056-1', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

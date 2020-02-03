@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>安全披露和政策 - 使用 async-std 在 Rust 中进行异步编程</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Async programming in Rust with async-std">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="../introduction.zh.html"><strong aria-hidden="true">1.</strong> 介绍</a></li><li><ol class="section"><li class="expanded "><a href="../overview/async-std.zh.html"><strong aria-hidden="true">1.1.</strong> 欢迎来到async-std！</a></li><li class="expanded "><a href="../overview/std-and-library-futures.zh.html"><strong aria-hidden="true">1.2.</strong> std::future和futures-rs</a></li><li class="expanded "><a href="../overview/stability-guarantees.zh.html"><strong aria-hidden="true">1.3.</strong> 稳定性保证</a></li></ol></li><li class="expanded "><a href="../concepts.zh.html"><strong aria-hidden="true">2.</strong> 使用 async-std 的异步概念</a></li><li><ol class="section"><li class="expanded "><a href="../concepts/futures.zh.html"><strong aria-hidden="true">2.1.</strong> Futures</a></li><li class="expanded "><a href="../concepts/tasks.zh.html"><strong aria-hidden="true">2.2.</strong> Tasks</a></li><li class="expanded "><a href="../concepts/async-read-write.zh.html"><strong aria-hidden="true">2.3.</strong> TODO：异步读/写</a></li><li class="expanded "><a href="../concepts/streams.zh.html"><strong aria-hidden="true">2.4.</strong> TODO：Streams and Channels</a></li></ol></li><li class="expanded "><a href="../tutorial/index.zh.html"><strong aria-hidden="true">3.</strong> 教程：实现聊天</a></li><li><ol class="section"><li class="expanded "><a href="../tutorial/specification.zh.html"><strong aria-hidden="true">3.1.</strong> 规格和入门</a></li><li class="expanded "><a href="../tutorial/accept_loop.zh.html"><strong aria-hidden="true">3.2.</strong> 编写一个 Accept 循环</a></li><li class="expanded "><a href="../tutorial/receiving_messages.zh.html"><strong aria-hidden="true">3.3.</strong> 接收讯息</a></li><li class="expanded "><a href="../tutorial/sending_messages.zh.html"><strong aria-hidden="true">3.4.</strong> 发送讯息</a></li><li class="expanded "><a href="../tutorial/connecting_readers_and_writers.zh.html"><strong aria-hidden="true">3.5.</strong> 连接读者和作家</a></li><li class="expanded "><a href="../tutorial/all_together.zh.html"><strong aria-hidden="true">3.6.</strong> 全部一起来</a></li><li class="expanded "><a href="../tutorial/clean_shutdown.zh.html"><strong aria-hidden="true">3.7.</strong> 干净地关机</a></li><li class="expanded "><a href="../tutorial/handling_disconnection.zh.html"><strong aria-hidden="true">3.8.</strong> 处理断开连接</a></li><li class="expanded "><a href="../tutorial/implementing_a_client.zh.html"><strong aria-hidden="true">3.9.</strong> 实现一个 Client</a></li></ol></li><li class="expanded "><a href="../patterns.zh.html"><strong aria-hidden="true">4.</strong> TODO：异步模式</a></li><li><ol class="section"><li class="expanded "><a href="../patterns/small-patterns.zh.html"><strong aria-hidden="true">4.1.</strong> TODO：收集的小模式</a></li></ol></li><li class="expanded "><a href="../security/index.zh.html"><strong aria-hidden="true">5.</strong> 安全实践</a></li><li><ol class="section"><li class="expanded "><a href="../security/policy.zh.html" class="active"><strong aria-hidden="true">5.1.</strong> 安全披露和政策</a></li></ol></li><li class="expanded "><a href="../glossary.zh.html"><strong aria-hidden="true">6.</strong> 术语</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">使用 async-std 在 Rust 中进行异步编程</h1>
+
+                        <div class="right-buttons">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#policy" id="policy">Policy</a></h1>
+<p>安全是我们所做工作的核心原则之一，为此，我们要确保 async-std 具有安全的实现。感谢您抽出宝贵的时间，透露您发现的任何问题。</p>
+<p>async-std 发行版中，所有安全错误应通过电子邮件报告至 florian.gilcher@ferrous-systems.com 。列表已交付给小型安全团队。我们会在 24 小时内确认您的电子邮件，并且会在 48 小时内，收到对电子邮件的详细回复，指示您处理报告的后续步骤。如果您愿意，您可以使用我们的公钥加密报告。该密钥也位于 MIT 的密钥服务器上，复制如下。</p>
+<p>确保使用一行，来描述主题，以免你的报告被错过。在对您的报告进行初次答复后，安全团队努力使您，了解有关修复和完整公告的进展情况。正如<a href="https://en.wikipedia.org/wiki/RFPolicy">RFPolicy</a>所推荐的，这些更新至少每五天发送一次。实际上，更有可能是每 24-48 小时一次。</p>
+<p>如果您在 48 小时内，未收到对电子邮件的答复，或者在过去五天内没有收到安全团队的来信，则可以采取一些步骤（按顺序）：</p>
+<ul>
+<li>在我们的社区论坛上发帖</li>
+</ul>
+<p>请注意，讨论论坛是公共区域。在错误补丁更新过程，请勿讨论您的 issue。只需说，您正在设法与安全团队联系。</p>
+<h2><a class="header" href="#disclosure-policy" id="disclosure-policy">Disclosure policy</a></h2>
+<p>async-std 项目具有 5 个步骤的公开过程。</p>
+<ul>
+<li>The security report is received and is assigned a primary handler. This person will coordinate the fix and release process.</li>
+<li>The problem is confirmed and a list of all affected versions is determined.</li>
+<li>Code is audited to find any potential similar problems.</li>
+<li>Fixes are prepared for all releases which are still under maintenance. These fixes are not committed to the public repository but rather held locally pending the announcement.</li>
+<li>On the embargo date, the changes are pushed to the public repository and new builds are deployed to crates.io. Within 6 hours, a copy of the advisory will be published on the the async.rs blog.</li>
+</ul>
+<p>此过程可能需要一些时间，特别是在需要与其他项目的维护者进行协调时。我们将尽一切努力尽快解决该错误，但是，请务必遵循上面的发布流程，以确保以一致的方式处理该披露，这一点很重要。</p>
+<h2><a class="header" href="#credits" id="credits">Credits</a></h2>
+<p>该政策是根据<a href="https://www.rust-lang.org/policies/security">Rust project</a>安全政策。</p>
+<h2><a class="header" href="#pgp-key" id="pgp-key">PGP Key</a></h2>
+<pre><code class="language-text">-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQENBF1Wu/ABCADJaGt4HwSlqKB9BGHWYKZj/6mTMbmc29vsEOcCSQKo6myCf9zc
+sasWAttep4FAUDX+MJhVbBTSq9M1YVxp33Qh5AF0t9SnJZnbI+BZuGawcHDL01xE
+bE+8bcA2+szeTTUZCeWwsaoTd/2qmQKvpUCBQp7uBs/ITO/I2q7+xCGXaOHZwUKc
+H8SUBLd35nYFtjXAeejoZVkqG2qEjrc9bkZAwxFXi7Fw94QdkNLaCjNfKxZON/qP
+A3WOpyWPr3ERk5C5prjEAvrW8kdqpTRjdmzQjsr8UEXb5GGEOo93N4OLZVQ2mXt9
+dfn++GOnOk7sTxvfiDH8Ru5o4zCtKgO+r5/LABEBAAG0UkZsb3JpYW4gR2lsY2hl
+ciAoU2VjdXJpdHkgY29udGFjdCBhc3luYy1zdGQpIDxmbG9yaWFuLmdpbGNoZXJA
+ZmVycm91cy1zeXN0ZW1zLmNvbT6JATgEEwECACIFAl1Wu/ACGwMGCwkIBwMCBhUI
+AgkKCwQWAgMBAh4BAheAAAoJEACXY97PwLtSc0AH/18yvrElVOkG0ADWX7l+JKHH
+nMQtYj0Auop8d6TuKBbpwtYhwELrQoITDMV7f2XEnchNsvYxAyBZhIISmXeJboE1
+KzZD1O+4QPXRcXhj+QNsKQ680mrgZXgAI2Y4ptIW9Vyw3jiHu/ZVopvDAt4li+up
+3fRJGPAvGu+tclpJmA+Xam23cDj89M7/wHHgKIyT59WgFwyCgibL+NHKwg2Unzou
+9uyZQnq6hf62sQTWEZIAr9BQpKmluplNIJHDeECWzZoE9ucE2ZXsq5pq9qojsAMK
+yRdaFdpBcD/AxtrTKFeXGS7X7LqaljY/IFBEdJOqVNWpqSLjGWqjSLIEsc1AB0K5
+AQ0EXVa78AEIAJMxBOEEW+2c3CcjFuUfcRsoBsFH3Vk+GwCbjIpNHq/eAvS1yy2L
+u10U5CcT5Xb6be3AeCYv00ZHVbEi6VwoauVCSX8qDjhVzQxvNLgQ1SduobjyF6t8
+3M/wTija6NvMKszyw1l2oHepxSMLej1m49DyCDFNiZm5rjQcYnFT4J71syxViqHF
+v2fWCheTrHP3wfBAt5zyDet7IZd/EhYAK6xXEwr9nBPjfbaVexm2B8K6hOPNj0Bp
+OKm4rcOj7JYlcxrwhMvNnwEue7MqH1oXAsoaC1BW+qs4acp/hHpesweL6Rcg1pED
+OJUQd3UvRsqRK0EsorDu0oj5wt6Qp3ZEbPMAEQEAAYkBHwQYAQIACQUCXVa78AIb
+DAAKCRAAl2Pez8C7Uv8bB/9scRm2wvzHLbFtcEHaHvlKO1yYfSVqKqJzIKHc7pM2
++szM8JVRTxAbzK5Xih9SB5xlekixxO2UCJI5DkJ/ir/RCcg+/CAQ8iLm2UcYAgJD
+TocKiR5gjNAvUDI4tMrDLLdF+7+RCQGc7HBSxFiNBJVGAztGVh1+cQ0zaCX6Tt33
+1EQtyRcPID0m6+ip5tCJN0dILC0YcwzXGrSgjB03JqItIyJEucdQz6UB84TIAGku
+JJl4tktgD9T7Rb5uzRhHCSbLy89DQVvCcKD4B94ffuDW3HO8n8utDusOiZuG4BUf
+WdFy6/gTLNiFbTzkq1BBJQMN1nBwGs1sn63RRgjumZ1N
+=dIcF
+-----END PGP PUBLIC KEY BLOCK-----
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../security/index.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../glossary.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../security/index.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../glossary.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+        <!-- Google Analytics Tag -->
+        <script type="text/javascript">
+            var localAddrs = ["localhost", "127.0.0.1", ""];
+
+            // make sure we don't activate google analytics if the developer is
+            // inspecting the book locally...
+            if (localAddrs.indexOf(document.location.hostname) === -1) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-128555056-1', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>
